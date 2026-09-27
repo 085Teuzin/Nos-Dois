@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Nosso Cantinho 2D - Teuzin & Daily</title>
+  <title>Nós Dois - Made By: @085_Teuzinnn</title>
   <style>
     * {
       box-sizing: border-box;
@@ -17,7 +17,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #1a1a1a;
+      background-color: #000;
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
@@ -42,32 +42,46 @@
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    #top-bar {
+    #top-bar-container {
       position: absolute;
-      top: 15px;
+      top: 10px;
       left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    #top-actions-row {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      z-index: 10;
-      pointer-events: none;
+      pointer-events: auto;
+    }
+
+    .center-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .nav-arrow {
       background: rgba(0, 0, 0, 0.6);
       color: white;
       border: 2px solid rgba(255, 255, 255, 0.4);
-      width: 45px;
-      height: 45px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      pointer-events: auto;
       backdrop-filter: blur(5px);
       transition: transform 0.1s, background 0.2s;
     }
@@ -76,37 +90,19 @@
       transform: scale(0.9);
     }
 
-    #room-title {
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 16px;
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    #top-right-controls {
-      display: flex;
-      gap: 10px;
-      pointer-events: auto;
-    }
-
     .icon-btn {
       background: rgba(0, 0, 0, 0.6);
       color: white;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
+      width: 42px;
+      height: 42px;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 18px;
       display: flex;
       justify-content: center;
       align-items: center;
       backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
       transition: transform 0.1s;
     }
 
@@ -114,7 +110,104 @@
       transform: scale(0.9);
     }
 
-    #role-modal {
+    #stats-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      padding: 6px 12px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow-x: auto;
+      max-width: 95vw;
+      pointer-events: auto;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    #bars-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 6px 12px;
+      border-radius: 15px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      max-width: 95vw;
+      overflow-x: auto;
+      pointer-events: auto;
+    }
+
+    .bar-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .bar-container {
+      width: 55px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 100%;
+      transition: width 0.3s linear, background-color 0.3s;
+    }
+
+    #bar-hunger-fill { background-color: #ff4757; }
+    #bar-sleep-fill { background-color: #1e90ff; }
+    #bar-dirt-fill { background-color: #ffa502; }
+    #bar-affection-fill { background-color: #ff6b81; }
+
+    #loading-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      z-index: 9999;
+      color: white;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-left-color: #ff4757;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #room-modal, #role-modal, #cooldown-modal {
       position: absolute;
       top: 0;
       left: 0;
@@ -130,17 +223,64 @@
       gap: 20px;
       z-index: 30;
       color: white;
+      text-align: center;
+      padding: 20px;
     }
 
-    #role-modal::before {
+    #room-modal::before, #role-modal::before, #cooldown-modal::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.7);
       z-index: -1;
+    }
+
+    .credits-footer {
+      position: absolute;
+      bottom: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.8);
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .cooldown-box {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 25px;
+      border-radius: 20px;
+      border: 2px solid #ff4757;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      max-width: 320px;
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+    }
+
+    .cooldown-timer {
+      font-size: 38px;
+      font-weight: bold;
+      color: #ff4757;
+      letter-spacing: 2px;
+      font-family: monospace;
+    }
+
+    .custom-input {
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      outline: none;
+      width: 220px;
+      user-select: auto;
+      -webkit-user-select: auto;
     }
 
     .role-btn {
@@ -150,49 +290,15 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      width: 200px;
+      width: 220px;
       transition: transform 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    .role-btn:active {
-      transform: scale(0.95);
-    }
-
+    .role-btn:active { transform: scale(0.95); }
     .role-btn-boy { background: #2ed573; color: white; }
-    .role-btn-girl { background: #ff6b81; color: white; }
-
-    #loading-modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      z-index: 60;
-      color: white;
-    }
-
-    .progress-bar-container {
-      width: 200px;
-      height: 12px;
-      background: #333;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #555;
-    }
-
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: #ff4757;
-      transition: width 0.3s ease;
-    }
+    .role-btn-bay { background: #ff6b81; color: white; }
+    .role-btn-room { background: #70a1ff; color: white; }
 
     #settings-modal {
       position: absolute;
@@ -208,7 +314,7 @@
     }
 
     .settings-card {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       width: 260px;
       border-radius: 15px;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -216,7 +322,6 @@
       flex-direction: column;
       padding: 15px;
       gap: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       color: white;
       backdrop-filter: blur(8px);
     }
@@ -227,10 +332,6 @@
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-bottom: 8px;
-    }
-
-    .settings-header h3 {
-      font-size: 16px;
     }
 
     .close-btn {
@@ -260,9 +361,7 @@
       transition: background 0.3s;
     }
 
-    .toggle-switch:checked {
-      background: #2ed573;
-    }
+    .toggle-switch:checked { background: #2ed573; }
 
     .toggle-switch::before {
       content: '';
@@ -276,9 +375,7 @@
       transition: transform 0.3s;
     }
 
-    .toggle-switch:checked::before {
-      transform: translateX(20px);
-    }
+    .toggle-switch:checked::before { transform: translateX(20px); }
 
     #chat-container {
       position: absolute;
@@ -288,12 +385,20 @@
       display: flex;
       gap: 8px;
       z-index: 10;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       padding: 8px 12px;
       border-radius: 25px;
       backdrop-filter: blur(5px);
       max-width: 95vw;
       align-items: center;
+    }
+
+    #chat-form {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
     }
 
     #chat-input {
@@ -303,6 +408,8 @@
       outline: none;
       font-size: 14px;
       width: 180px;
+      user-select: auto;
+      -webkit-user-select: auto;
     }
 
     .action-btn {
@@ -321,15 +428,8 @@
       flex-shrink: 0;
     }
 
-    #interaction-btn {
-      background: #ff6b81;
-      display: none;
-    }
-
-    #sleep-btn {
-      background: #70a1ff;
-      display: none;
-    }
+    #interaction-btn { background: #ff6b81; display: none; }
+    #room-action-btn { background: #70a1ff; display: none; }
 
     #interaction-modal {
       position: absolute;
@@ -360,11 +460,74 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: background 0.2s;
     }
 
-    .interaction-option:active {
-      background: rgba(255, 255, 255, 0.3);
+    .interaction-option:active { background: rgba(255, 255, 255, 0.3); }
+
+    #board-modal {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 12px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 25;
+      backdrop-filter: blur(10px);
+      width: 280px;
+      color: white;
+    }
+
+    #board-messages {
+      max-height: 150px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .board-msg-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      border-radius: 6px;
+      word-break: break-word;
+    }
+
+    #board-form {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    #board-input {
+      flex: 1;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      outline: none;
+      font-size: 13px;
+      user-select: auto;
+      -webkit-user-select: auto;
+    }
+
+    #board-send-btn {
+      background: #ffa502;
+      color: white;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
     }
 
     #photo-modal {
@@ -385,7 +548,6 @@
       max-width: 80%;
       max-height: 70%;
       border-radius: 15px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
     #close-photo {
@@ -402,25 +564,70 @@
 </head>
 <body>
 
-  <div id="role-modal">
-    <button class="role-btn role-btn-boy" id="btn-boy">👦 Teuzin</button>
-    <button class="role-btn role-btn-girl" id="btn-girl">👧 Daily</button>
-  </div>
-
   <div id="loading-modal">
-    <h3>Aguarde...</h3>
-    <div class="progress-bar-container">
-      <div class="progress-bar" id="loading-progress"></div>
+    <div class="spinner"></div>
+    <h3 style="font-weight: normal; letter-spacing: 1px;">Aguarde...</h3>
+  </div>
+
+  <div id="cooldown-modal" style="display: none;">
+    <div class="cooldown-box">
+      <h2>⚠️ Punição!</h2>
+      <p id="cooldown-reason">Você descuidou das suas necessidades!</p>
+      <p style="font-size: 13px; color: #ccc;">Aguarde o tempo terminar para voltar a jogar:</p>
+      <div id="cooldown-timer" class="cooldown-timer">05:00</div>
     </div>
   </div>
 
-  <div id="top-bar">
-    <button class="nav-arrow" id="prev-room-btn">◀</button>
-    <div id="room-title">Sala</div>
-    <div id="top-right-controls">
-      <button class="icon-btn" id="settings-btn">⚙️</button>
+  <div id="room-modal">
+    <h2>Código da Sala</h2>
+    <input type="text" id="room-code-input" class="custom-input" placeholder="Ex: casal123" maxlength="20">
+    <button class="role-btn role-btn-room" id="btn-enter-room">Entrar na Sala</button>
+    <div class="credits-footer">Made By: @085_Teuzinnn</div>
+  </div>
+
+  <div id="role-modal" style="display: none;">
+    <h2>Escolha seu personagem</h2>
+    <button class="role-btn role-btn-boy" id="btn-boy">👦 Teuzin</button>
+    <button class="role-btn role-btn-bay" id="btn-bay">👧 Julia</button>
+  </div>
+
+  <div id="top-bar-container">
+    <div id="top-actions-row">
+      <button class="nav-arrow" id="prev-room-btn">◀</button>
+      <div class="center-group">
+        <button class="icon-btn" id="board-btn">📭</button>
+        <button class="icon-btn" id="settings-btn">⚙️</button>
+      </div>
+      <button class="nav-arrow" id="next-room-btn">▶</button>
     </div>
-    <button class="nav-arrow" id="next-room-btn">▶</button>
+
+    <div id="bars-row">
+      <div class="bar-group">
+        <span>🍔</span>
+        <div class="bar-container"><div id="bar-hunger-fill" class="bar-fill"></div></div>
+      </div>
+      <div class="bar-group">
+        <span>💤</span>
+        <div class="bar-container"><div id="bar-sleep-fill" class="bar-fill"></div></div>
+      </div>
+      <div class="bar-group">
+        <span>🚿</span>
+        <div class="bar-container"><div id="bar-dirt-fill" class="bar-fill"></div></div>
+      </div>
+      <div class="bar-group">
+        <span>🥰</span>
+        <div class="bar-container"><div id="bar-affection-fill" class="bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div id="stats-row">
+      <div class="stat-item"><span>😘:</span><span id="stat-kiss">0</span></div>
+      <div class="stat-item"><span>🤗:</span><span id="stat-hug">0</span></div>
+      <div class="stat-item"><span>🥰:</span><span id="stat-affection">0</span></div>
+      <div class="stat-item"><span>😂:</span><span id="stat-tickle">0</span></div>
+      <div class="stat-item"><span>😌:</span><span id="stat-massage">0</span></div>
+      <div class="stat-item"><span>😡:</span><span id="stat-fight">0</span></div>
+    </div>
   </div>
 
   <div id="game-container">
@@ -430,16 +637,26 @@
   <div id="interaction-modal">
     <button class="interaction-option" data-action="hug">🤗 Abraçar</button>
     <button class="interaction-option" data-action="kiss">😘 Beijar</button>
-    <button class="interaction-option" data-action="greet">🤝 Saudação</button>
+    <button class="interaction-option" data-action="massage">😌 Massagear</button>
     <button class="interaction-option" data-action="tickle">😂 Cócegas</button>
     <button class="interaction-option" data-action="affection">🥰 Carinho</button>
     <button class="interaction-option" data-action="fight">😡 Brigar</button>
     <button class="interaction-option" data-action="bye">👋 Até mais</button>
   </div>
 
+  <div id="board-modal">
+    <div id="board-messages"></div>
+    <form id="board-form" action="javascript:void(0);">
+      <input type="text" id="board-input" placeholder="Deixe um recado..." maxlength="60" enterkeyhint="send" autocomplete="off">
+      <button type="submit" id="board-send-btn">🚀</button>
+    </form>
+  </div>
+
   <div id="chat-container">
-    <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="40">
-    <button class="action-btn" id="sleep-btn">😴</button>
+    <form id="chat-form" action="javascript:void(0);">
+      <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="40" enterkeyhint="send" autocomplete="off">
+    </form>
+    <button class="action-btn" id="room-action-btn"></button>
     <button class="action-btn" id="interaction-btn">❓️</button>
   </div>
 
@@ -450,8 +667,8 @@
         <button class="close-btn" id="close-settings-btn">✖</button>
       </div>
       <div class="setting-item">
-        <span>Personagem</span>
-        <button class="role-btn role-btn-boy" id="switch-role-btn" style="width: auto; padding: 5px 10px; font-size: 12px; box-shadow: none;">Trocar</button>
+        <span>Trocar Sala</span>
+        <button class="role-btn role-btn-room" id="switch-room-btn" style="width: auto; padding: 5px 10px; font-size: 12px; box-shadow: none;">Sair</button>
       </div>
       <div class="setting-item">
         <span>Música</span>
@@ -473,8 +690,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
-    import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+    import { getDatabase, ref, set, onValue, get, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBqRAsWfP4w-r82PZOaJcDck7W8Aeph3p8",
@@ -488,30 +704,34 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const db = getDatabase(app);
 
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    let myRole = localStorage.getItem('saved_role') || null;
+    let currentRoomCode = localStorage.getItem('nosdois_room_code') || null;
+    let myRole = localStorage.getItem('nosdois_saved_role') || null;
     let roomKeys = ['wall1', 'wall2', 'wall3', 'wall4', 'wall5'];
-    let roomNames = {
-      wall1: 'Sala',
-      wall2: 'Quarto',
-      wall3: 'Cozinha',
-      wall4: 'Banheiro',
-      wall5: 'Rua'
-    };
     let currentRoomIndex = 0;
     let currentRoom = roomKeys[currentRoomIndex];
     let isDragging = false;
     let lastSaveTime = 0;
+    let lastReadBoardTime = parseInt(localStorage.getItem('nosdois_last_read_board_time') || '0');
+    let actionTimeout = null;
 
-    let settings = {
-      bgm: false,
-      clicks: true
+    let needs = {
+      hunger: 100,
+      sleep: 100,
+      dirt: 100,
+      affection: 100
     };
+
+    let cooldownRemaining = parseInt(localStorage.getItem('nosdois_cooldown_time') || '0');
+    let needsInterval = null;
+    let cooldownInterval = null;
+
+    let savedSettings = localStorage.getItem('nosdois_game_settings');
+    let settings = savedSettings ? JSON.parse(savedSettings) : { bgm: true, clicks: true };
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playClickSound() {
@@ -534,17 +754,25 @@
 
     const roleNames = {
       boy: 'Teuzin',
-      girl: 'Daily'
+      bay: 'Julia'
+    };
+
+    const roomConfig = {
+      wall1: { icon: '🕹', text: 'Jogando...', duration: 10000, emoji: '🎮' },
+      wall2: { icon: '😴', text: 'Dormindo...', duration: 20000, emoji: '💤' },
+      wall3: { icon: '😋', text: 'Comendo...', duration: 5000, emoji: '🍔' },
+      wall4: { icon: '🧼', text: 'Banhando...', duration: 10000, emoji: '🚿' },
+      wall5: { icon: '🌱', text: 'Relaxando...', duration: 5000, emoji: '💦' }
     };
 
     const players = {
-      boy: { x: 30, y: 50, room: 'wall1', msg: '', msgTime: 0, isSleeping: false, reactionEmoji: '', reactionTime: 0 },
-      girl: { x: 70, y: 50, room: 'wall1', msg: '', msgTime: 0, isSleeping: false, reactionEmoji: '', reactionTime: 0 }
+      boy: { x: 30, y: 50, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 },
+      bay: { x: 70, y: 50, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 }
     };
 
     const images = {
       boy: new Image(),
-      girl: new Image(),
+      bay: new Image(),
       wall1: new Image(),
       wall2: new Image(),
       wall3: new Image(),
@@ -554,7 +782,7 @@
     };
 
     images.boy.src = 'boy.png';
-    images.girl.src = 'girl.png';
+    images.bay.src = 'bay.png';
     images.wall1.src = 'wall1.png';
     images.wall2.src = 'wall2.png';
     images.wall3.src = 'wall3.png';
@@ -563,41 +791,121 @@
     images.frame.src = 'frame.png';
 
     const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.05;
 
-    function showLoading(callback) {
-      const loadingModal = document.getElementById('loading-modal');
-      const progressBar = document.getElementById('loading-progress');
-      loadingModal.style.display = 'flex';
-      progressBar.style.width = '0%';
-
-      setTimeout(() => progressBar.style.width = '40%', 100);
-      setTimeout(() => progressBar.style.width = '80%', 300);
-      setTimeout(() => {
-        progressBar.style.width = '100%';
-        setTimeout(() => {
-          loadingModal.style.display = 'none';
-          if (callback) callback();
-        }, 200);
-      }, 500);
+    function saveSettings() {
+      localStorage.setItem('nosdois_game_settings', JSON.stringify(settings));
     }
 
     function updateAudioState() {
+      bgMusic.volume = 0.05;
       if (settings.bgm) {
         bgMusic.play().catch(() => {});
       } else {
         bgMusic.pause();
       }
       document.getElementById('toggle-bgm').checked = settings.bgm;
+      document.getElementById('toggle-clicks').checked = settings.clicks;
+    }
+
+    function updateBarsUI() {
+      document.getElementById('bar-hunger-fill').style.width = needs.hunger + '%';
+      document.getElementById('bar-sleep-fill').style.width = needs.sleep + '%';
+      document.getElementById('bar-dirt-fill').style.width = needs.dirt + '%';
+      document.getElementById('bar-affection-fill').style.width = needs.affection + '%';
+    }
+
+    function startNeedsLoop() {
+      if (needsInterval) clearInterval(needsInterval);
+
+      needsInterval = setInterval(() => {
+        if (cooldownRemaining > 0) return;
+
+        let isSleeping = myRole && players[myRole].isBusy && players[myRole].room === 'wall2';
+        let isBathing = myRole && players[myRole].isBusy && players[myRole].room === 'wall4';
+
+        if (isSleeping) {
+          needs.sleep = Math.min(100, needs.sleep + 5);
+        } else {
+          needs.sleep = Math.max(0, needs.sleep - 0.2);
+        }
+
+        if (isBathing) {
+          needs.dirt = Math.min(100, needs.dirt + 10);
+        } else {
+          needs.dirt = Math.max(0, needs.dirt - 0.15);
+        }
+
+        needs.hunger = Math.max(0, needs.hunger - 0.25);
+        needs.affection = Math.max(0, needs.affection - 0.3);
+
+        updateBarsUI();
+
+        if (needs.hunger <= 0 || needs.sleep <= 0 || needs.dirt <= 0 || needs.affection <= 0) {
+          let reason = "Faltou carinho e afeto entre vocês!";
+          if (needs.hunger <= 0) reason = "Você ficou com muita fome!";
+          if (needs.sleep <= 0) reason = "Você ficou com muito sono!";
+          if (needs.dirt <= 0) reason = "Você ficou muito sujo!";
+          
+          triggerCooldown(reason);
+        }
+      }, 1000);
+    }
+
+    function triggerCooldown(reasonText) {
+      cooldownRemaining = 300;
+      localStorage.setItem('nosdois_cooldown_time', cooldownRemaining.toString());
+
+      needs.hunger = 100;
+      needs.sleep = 100;
+      needs.dirt = 100;
+      needs.affection = 100;
+      updateBarsUI();
+
+      document.getElementById('cooldown-reason').innerText = reasonText;
+      showCooldownModal();
+    }
+
+    function showCooldownModal() {
+      document.getElementById('loading-modal').style.display = 'none';
+      document.getElementById('room-modal').style.display = 'none';
+      document.getElementById('role-modal').style.display = 'none';
+      document.getElementById('cooldown-modal').style.display = 'flex';
+
+      updateCooldownTimerUI();
+
+      if (cooldownInterval) clearInterval(cooldownInterval);
+      cooldownInterval = setInterval(() => {
+        if (cooldownRemaining > 0) {
+          cooldownRemaining--;
+          localStorage.setItem('nosdois_cooldown_time', cooldownRemaining.toString());
+          updateCooldownTimerUI();
+        } else {
+          clearInterval(cooldownInterval);
+          localStorage.removeItem('nosdois_cooldown_time');
+          document.getElementById('cooldown-modal').style.display = 'none';
+          initGame();
+        }
+      }, 1000);
+    }
+
+    function updateCooldownTimerUI() {
+      const minutes = Math.floor(cooldownRemaining / 60);
+      const seconds = cooldownRemaining % 60;
+      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById('cooldown-timer').innerText = formatted;
     }
 
     document.getElementById('toggle-bgm').addEventListener('change', (e) => {
       playClickSound();
       settings.bgm = e.target.checked;
+      saveSettings();
       updateAudioState();
     });
 
     document.getElementById('toggle-clicks').addEventListener('change', (e) => {
       settings.clicks = e.target.checked;
+      saveSettings();
       playClickSound();
     });
 
@@ -611,27 +919,42 @@
       document.getElementById('settings-modal').style.display = 'none';
     });
 
-    document.getElementById('switch-role-btn').addEventListener('click', () => {
+    document.getElementById('switch-room-btn').addEventListener('click', () => {
       playClickSound();
       document.getElementById('settings-modal').style.display = 'none';
-      localStorage.removeItem('saved_role');
+      localStorage.removeItem('nosdois_room_code');
+      localStorage.removeItem('nosdois_saved_role');
+      currentRoomCode = null;
       myRole = null;
-      document.getElementById('role-modal').style.display = 'flex';
+      document.getElementById('loading-modal').style.display = 'none';
+      document.getElementById('role-modal').style.display = 'none';
+      document.getElementById('room-modal').style.display = 'flex';
     });
+
+    function resetBusyState() {
+      if (actionTimeout) {
+        clearTimeout(actionTimeout);
+        actionTimeout = null;
+      }
+      if (myRole && players[myRole]) {
+        players[myRole].isBusy = false;
+        players[myRole].busyText = '';
+        players[myRole].reactionEmoji = '';
+        savePositionThrottled(true);
+      }
+    }
 
     function updateRoomDisplay() {
       currentRoom = roomKeys[currentRoomIndex];
-      document.getElementById('room-title').innerText = roomNames[currentRoom];
       
       if (myRole) {
         players[myRole].room = currentRoom;
-        if (currentRoom !== 'wall2' && players[myRole].isSleeping) {
-          players[myRole].isSleeping = false;
-        }
+        resetBusyState();
         savePositionThrottled(true);
       }
       
       document.getElementById('interaction-modal').style.display = 'none';
+      document.getElementById('board-modal').style.display = 'none';
       checkControlsVisibility();
       render();
     }
@@ -656,98 +979,250 @@
     window.addEventListener('resize', resizeCanvas);
 
     function initGame() {
-      if (myRole) {
-        document.getElementById('role-modal').style.display = 'none';
-        showLoading(() => {
-          const myRef = ref(db, `teuzin_games/game_state/players/${myRole}`);
-          get(myRef).then((snapshot) => {
-            const data = snapshot.val();
-            if (data && data.room) {
-              currentRoom = data.room;
-              currentRoomIndex = roomKeys.indexOf(currentRoom);
-              if (currentRoomIndex === -1) currentRoomIndex = 0;
-              document.getElementById('room-title').innerText = roomNames[currentRoom];
-            }
-            
-            const playersRef = ref(db, 'teuzin_games/game_state/players');
-            onValue(playersRef, (snapshot) => {
-              const data = snapshot.val();
-              if (data) {
-                if (data.boy) players.boy = data.boy;
-                if (data.girl) players.girl = data.girl;
-                checkControlsVisibility();
-                render();
-              }
-            });
-          });
+      updateAudioState();
+      startNeedsLoop();
 
-          const interactionRef = ref(db, 'teuzin_games/game_state/interaction_event');
-          onValue(interactionRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && Date.now() - data.time < 3000) {
-              applyInteraction(data.action, data.from);
-            }
-          });
-
-          resizeCanvas();
-        });
-      } else {
-        document.getElementById('role-modal').style.display = 'flex';
+      if (cooldownRemaining > 0) {
+        showCooldownModal();
+        return;
       }
+
+      window.addEventListener('click', () => {
+        if (settings.bgm && bgMusic.paused) {
+          bgMusic.volume = 0.05;
+          bgMusic.play().catch(() => {});
+        }
+      }, { once: true });
+
+      if (!currentRoomCode) {
+        document.getElementById('loading-modal').style.display = 'none';
+        document.getElementById('room-modal').style.display = 'flex';
+        return;
+      }
+
+      if (!myRole) {
+        document.getElementById('loading-modal').style.display = 'none';
+        document.getElementById('room-modal').style.display = 'none';
+        document.getElementById('role-modal').style.display = 'flex';
+        return;
+      }
+
+      document.getElementById('room-modal').style.display = 'none';
+      document.getElementById('role-modal').style.display = 'none';
+      document.getElementById('loading-modal').style.display = 'flex';
+
+      const myRef = ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`);
+      get(myRef).then((snapshot) => {
+        const data = snapshot.val();
+        if (data && data.room) {
+          currentRoom = data.room;
+          currentRoomIndex = roomKeys.indexOf(currentRoom);
+          if (currentRoomIndex === -1) currentRoomIndex = 0;
+          
+          players[myRole].x = data.x !== undefined ? data.x : players[myRole].x;
+          players[myRole].y = data.y !== undefined ? data.y : players[myRole].y;
+          players[myRole].room = data.room;
+          players[myRole].isBusy = data.isBusy || false;
+          players[myRole].busyText = data.busyText || '';
+          players[myRole].msg = data.msg || '';
+          players[myRole].msgTime = data.msgTime || 0;
+        }
+
+        const playersRef = ref(db, `rooms/${currentRoomCode}/game_state/players`);
+        onValue(playersRef, (snapshot) => {
+          const playersData = snapshot.val();
+          if (playersData) {
+            if (playersData.boy) {
+              players.boy = { ...players.boy, ...playersData.boy };
+            }
+            if (playersData.bay) {
+              players.bay = { ...players.bay, ...playersData.bay };
+            }
+          }
+          if (!players.boy.room) players.boy.room = 'wall1';
+          if (!players.bay.room) players.bay.room = 'wall1';
+
+          checkControlsVisibility();
+          render();
+        });
+
+        const statsRef = ref(db, `rooms/${currentRoomCode}/game_state/stats`);
+        onValue(statsRef, (snapshot) => {
+          const statsData = snapshot.val() || {};
+          document.getElementById('stat-kiss').innerText = statsData.kiss || 0;
+          document.getElementById('stat-hug').innerText = statsData.hug || 0;
+          document.getElementById('stat-affection').innerText = statsData.affection || 0;
+          document.getElementById('stat-tickle').innerText = statsData.tickle || 0;
+          document.getElementById('stat-massage').innerText = statsData.massage || 0;
+          document.getElementById('stat-fight').innerText = statsData.fight || 0;
+        });
+
+        const interactionRef = ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`);
+        onValue(interactionRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data && Date.now() - data.time < 3000) {
+            applyInteraction(data.action, data.from);
+          }
+        });
+
+        const boardRef = ref(db, `rooms/${currentRoomCode}/game_state/board_messages`);
+        onValue(boardRef, (snapshot) => {
+          const data = snapshot.val();
+          renderBoardMessages(data);
+        });
+
+        resizeCanvas();
+
+        setTimeout(() => {
+          document.getElementById('loading-modal').style.display = 'none';
+        }, 300);
+      });
     }
+
+    document.getElementById('btn-enter-room').addEventListener('click', () => {
+      playClickSound();
+      const codeInput = document.getElementById('room-code-input').value.trim().toLowerCase();
+      if (codeInput) {
+        currentRoomCode = codeInput;
+        localStorage.setItem('nosdois_room_code', currentRoomCode);
+        initGame();
+      }
+    });
 
     function selectRole(role) {
       playClickSound();
       myRole = role;
-      localStorage.setItem('saved_role', role);
+      localStorage.setItem('nosdois_saved_role', role);
       initGame();
     }
 
     document.getElementById('btn-boy').addEventListener('click', () => selectRole('boy'));
-    document.getElementById('btn-girl').addEventListener('click', () => selectRole('girl'));
+    document.getElementById('btn-bay').addEventListener('click', () => selectRole('bay'));
 
     function checkControlsVisibility() {
       const interactionBtn = document.getElementById('interaction-btn');
-      const sleepBtn = document.getElementById('sleep-btn');
+      const roomActionBtn = document.getElementById('room-action-btn');
+      const chatInput = document.getElementById('chat-input');
 
-      if (currentRoom === 'wall2') {
-        sleepBtn.style.display = 'flex';
+      const isBusy = myRole && players[myRole].isBusy;
+
+      if (isBusy) {
+        chatInput.disabled = true;
+        chatInput.placeholder = players[myRole].busyText || "Você está ocupado...";
+        interactionBtn.style.display = 'none';
+        document.getElementById('interaction-modal').style.display = 'none';
       } else {
-        sleepBtn.style.display = 'none';
+        chatInput.disabled = false;
+        chatInput.placeholder = "Digite uma mensagem...";
       }
 
-      if (players.boy.room === currentRoom && players.girl.room === currentRoom) {
-        const dist = Math.hypot(players.boy.x - players.girl.x, players.boy.y - players.girl.y);
+      const roomData = roomConfig[currentRoom];
+      if (roomData) {
+        roomActionBtn.style.display = 'flex';
+        roomActionBtn.innerText = roomData.icon;
+      } else {
+        roomActionBtn.style.display = 'none';
+      }
+
+      if (!isBusy && players.boy.room === currentRoom && players.bay.room === currentRoom) {
+        const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
         if (dist < 20) {
           interactionBtn.style.display = 'flex';
-          return;
+        } else {
+          interactionBtn.style.display = 'none';
+          document.getElementById('interaction-modal').style.display = 'none';
         }
+      } else {
+        interactionBtn.style.display = 'none';
+        document.getElementById('interaction-modal').style.display = 'none';
       }
-      interactionBtn.style.display = 'none';
-      document.getElementById('interaction-modal').style.display = 'none';
     }
 
     document.getElementById('interaction-btn').addEventListener('click', () => {
       playClickSound();
+      if (myRole && players[myRole].isBusy) return;
+      if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
+      
+      const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
+      if (dist >= 20) return;
+
+      document.getElementById('board-modal').style.display = 'none';
       const modal = document.getElementById('interaction-modal');
       modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
     });
 
-    document.getElementById('sleep-btn').addEventListener('click', () => {
+    document.getElementById('board-btn').addEventListener('click', () => {
       playClickSound();
-      if (!myRole) return;
-      players[myRole].isSleeping = !players[myRole].isSleeping;
+      document.getElementById('interaction-modal').style.display = 'none';
+      const modal = document.getElementById('board-modal');
+      const isOpening = modal.style.display !== 'flex';
+      modal.style.display = isOpening ? 'flex' : 'none';
+      
+      if (isOpening) {
+        lastReadBoardTime = Date.now();
+        localStorage.setItem('nosdois_last_read_board_time', lastReadBoardTime.toString());
+        document.getElementById('board-btn').innerText = '📭';
+      }
+    });
+
+    document.getElementById('room-action-btn').addEventListener('click', () => {
+      playClickSound();
+      if (!myRole || !currentRoomCode) return;
+      
+      const config = roomConfig[currentRoom];
+      if (!config) return;
+
+      if (players[myRole].isBusy) {
+        resetBusyState();
+        checkControlsVisibility();
+        render();
+        return;
+      }
+
+      if (currentRoom === 'wall3') {
+        needs.hunger = Math.min(100, needs.hunger + 30);
+      }
+      
+      updateBarsUI();
+
+      players[myRole].isBusy = true;
+      players[myRole].busyText = config.text;
+      players[myRole].reactionEmoji = config.emoji;
+      players[myRole].reactionTime = Date.now();
+      
+      checkControlsVisibility();
       savePositionThrottled(true);
       render();
+
+      if (config.duration > 0) {
+        if (actionTimeout) clearTimeout(actionTimeout);
+        actionTimeout = setTimeout(() => {
+          resetBusyState();
+          checkControlsVisibility();
+          render();
+        }, config.duration);
+      }
     });
 
     document.querySelectorAll('.interaction-option').forEach(btn => {
       btn.addEventListener('click', (e) => {
         playClickSound();
+        if (myRole && players[myRole].isBusy) return;
+        if (!currentRoomCode) return;
+
+        if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
+        const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
+        if (dist >= 20) return;
+        
         const action = e.currentTarget.getAttribute('data-action');
         document.getElementById('interaction-modal').style.display = 'none';
         
-        set(ref(db, 'teuzin_games/game_state/interaction_event'), {
+        if (action) {
+          const statRef = ref(db, `rooms/${currentRoomCode}/game_state/stats/${action}`);
+          runTransaction(statRef, (currentValue) => (currentValue || 0) + 1);
+        }
+
+        set(ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`), {
           action: action,
           from: myRole,
           time: Date.now()
@@ -757,12 +1232,22 @@
 
     function applyInteraction(action, fromRole) {
       const now = Date.now();
-      const targetRole = fromRole === 'boy' ? 'girl' : 'boy';
+      const targetRole = fromRole === 'boy' ? 'bay' : 'boy';
+
+      if (action === 'fight') {
+        needs.affection = Math.max(0, needs.affection - 5);
+      } else if (['hug', 'kiss', 'massage', 'tickle', 'affection'].includes(action)) {
+        needs.affection = Math.min(100, needs.affection + 25);
+      }
+      updateBarsUI();
 
       const map = {
         hug: { from: '🤗', target: '🤗' },
         kiss: { from: '😘', target: '😘' },
-        greet: { from: '🤝', target: '🤝' },
+        massage: { 
+          from: '😌', 
+          target: fromRole === 'boy' ? '💆‍♀️' : '💆‍♂️' 
+        },
         tickle: { from: '😁', target: '🤣' },
         affection: { from: '☺️', target: '🥰' },
         fight: { from: '😡', target: '😓' },
@@ -775,16 +1260,70 @@
         players[targetRole].reactionEmoji = map[action].target;
         players[targetRole].reactionTime = now;
 
-        if (myRole) {
-          set(ref(db, `teuzin_games/game_state/players/${fromRole}/reactionEmoji`), map[action].from);
-          set(ref(db, `teuzin_games/game_state/players/${fromRole}/reactionTime`), now);
-          set(ref(db, `teuzin_games/game_state/players/${targetRole}/reactionEmoji`), map[action].target);
-          set(ref(db, `teuzin_games/game_state/players/${targetRole}/reactionTime`), now);
+        if (myRole && currentRoomCode) {
+          set(ref(db, `rooms/${currentRoomCode}/game_state/players/${fromRole}/reactionEmoji`), map[action].from);
+          set(ref(db, `rooms/${currentRoomCode}/game_state/players/${fromRole}/reactionTime`), now);
+          set(ref(db, `rooms/${currentRoomCode}/game_state/players/${targetRole}/reactionEmoji`), map[action].target);
+          set(ref(db, `rooms/${currentRoomCode}/game_state/players/${targetRole}/reactionTime`), now);
         }
 
         render();
       }
     }
+
+    function renderBoardMessages(data) {
+      const container = document.getElementById('board-messages');
+      container.innerHTML = '';
+      let hasNewMessage = false;
+
+      if (data) {
+        Object.values(data).forEach(msgObj => {
+          const item = document.createElement('div');
+          item.className = 'board-msg-item';
+          item.innerHTML = `<strong>${msgObj.author}:</strong> ${msgObj.text}`;
+          container.appendChild(item);
+
+          if (msgObj.time && msgObj.time > lastReadBoardTime) {
+            hasNewMessage = true;
+          }
+        });
+        container.scrollTop = container.scrollHeight;
+      }
+
+      const boardModalVisible = document.getElementById('board-modal').style.display === 'flex';
+      if (boardModalVisible) {
+        lastReadBoardTime = Date.now();
+        localStorage.setItem('nosdois_last_read_board_time', lastReadBoardTime.toString());
+        document.getElementById('board-btn').innerText = '📭';
+      } else {
+        document.getElementById('board-btn').innerText = hasNewMessage ? '📬' : '📭';
+      }
+    }
+
+    function sendBoardMessage() {
+      playClickSound();
+      const input = document.getElementById('board-input');
+      const text = input.value.trim();
+      if (text && myRole && currentRoomCode) {
+        const boardRef = ref(db, `rooms/${currentRoomCode}/game_state/board_messages`);
+        const now = Date.now();
+        push(boardRef, {
+          author: roleNames[myRole],
+          text: text,
+          time: now
+        });
+        input.value = '';
+        input.blur();
+        lastReadBoardTime = now;
+        localStorage.setItem('nosdois_last_read_board_time', lastReadBoardTime.toString());
+        document.getElementById('board-btn').innerText = '📭';
+      }
+    }
+
+    document.getElementById('board-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendBoardMessage();
+    });
 
     function renderSpeechBubble(x, y, text) {
       ctx.font = '14px Arial';
@@ -828,10 +1367,10 @@
         ctx.drawImage(images.frame, canvas.width * 0.45, canvas.height * 0.2, 80, 80);
       }
 
-      const charHeight = canvas.height * 0.25;
-      const charWidth = charHeight * 0.6;
+      const charHeight = canvas.height * 0.37;
+      const charWidth = charHeight * 0.90;
 
-      ['boy', 'girl'].forEach(role => {
+      ['boy', 'bay'].forEach(role => {
         const p = players[role];
         if (p.room === currentRoom) {
           const xPx = (p.x / 100) * canvas.width;
@@ -840,7 +1379,7 @@
           ctx.save();
           ctx.translate(xPx, yPx);
 
-          if (p.isSleeping) {
+          if (p.isBusy && p.room === 'wall2') {
             ctx.rotate(90 * Math.PI / 180);
           }
 
@@ -854,7 +1393,7 @@
 
           ctx.restore();
 
-          if (p.reactionEmoji && Date.now() - p.reactionTime < 3000) {
+          if (p.reactionEmoji && (Date.now() - p.reactionTime < 3000 || p.isBusy)) {
             renderHeadEmoji(xPx, yPx - (charHeight / 2), p.reactionEmoji);
           }
 
@@ -868,6 +1407,7 @@
     Object.values(images).forEach(img => img.onload = render);
 
     function sendMessage() {
+      if (myRole && players[myRole].isBusy) return;
       playClickSound();
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
@@ -875,13 +1415,15 @@
         players[myRole].msg = text;
         players[myRole].msgTime = Date.now();
         input.value = '';
+        input.blur();
         savePositionThrottled(true);
         render();
       }
     }
 
-    document.getElementById('chat-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
+    document.getElementById('chat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      sendMessage();
     });
 
     function getCoordinates(e) {
@@ -897,6 +1439,8 @@
 
     function startDrag(e) {
       if (!myRole) return;
+      if (players[myRole].isBusy) return;
+
       const coords = getCoordinates(e);
       const myP = players[myRole];
 
@@ -920,6 +1464,10 @@
 
     function moveDrag(e) {
       if (!isDragging || !myRole) return;
+      if (players[myRole].isBusy) {
+        isDragging = false;
+        return;
+      }
       e.preventDefault();
       const coords = getCoordinates(e);
 
@@ -951,14 +1499,15 @@
     function savePositionThrottled(force = false) {
       const now = Date.now();
       if (force || now - lastSaveTime > 50) {
-        if (!myRole) return;
-        set(ref(db, `teuzin_games/game_state/players/${myRole}`), {
+        if (!myRole || !currentRoomCode) return;
+        set(ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`), {
           x: players[myRole].x,
           y: players[myRole].y,
           room: players[myRole].room,
           msg: players[myRole].msg || '',
           msgTime: players[myRole].msgTime || 0,
-          isSleeping: players[myRole].isSleeping || false,
+          isBusy: players[myRole].isBusy || false,
+          busyText: players[myRole].busyText || '',
           reactionEmoji: players[myRole].reactionEmoji || '',
           reactionTime: players[myRole].reactionTime || 0
         });
