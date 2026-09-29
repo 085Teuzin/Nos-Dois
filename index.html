@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Nós Dois - Made By: @085_Teuzinnn</title>
+  <title>Nós Dois - Fulano & Fulana</title>
   <style>
     * {
       box-sizing: border-box;
@@ -560,9 +560,27 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    #toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      z-index: 10000;
+      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body>
+
+  <div id="toast"></div>
 
   <div id="loading-modal">
     <div class="spinner"></div>
@@ -582,19 +600,19 @@
     <h2>Código da Sala</h2>
     <input type="text" id="room-code-input" class="custom-input" placeholder="Ex: casal123" maxlength="20">
     <button class="role-btn role-btn-room" id="btn-enter-room">Entrar na Sala</button>
-    <div class="credits-footer">Made By: @085_Teuzinnn</div>
   </div>
 
   <div id="role-modal" style="display: none;">
     <h2>Escolha seu personagem</h2>
-    <button class="role-btn role-btn-boy" id="btn-boy">👦 Teuzin</button>
-    <button class="role-btn role-btn-bay" id="btn-bay">👧 Julia</button>
+    <button class="role-btn role-btn-boy" id="btn-boy">👦 Fulano</button>
+    <button class="role-btn role-btn-bay" id="btn-bay">👧 Fulana</button>
   </div>
 
   <div id="top-bar-container">
     <div id="top-actions-row">
       <button class="nav-arrow" id="prev-room-btn">◀</button>
       <div class="center-group">
+        <button class="icon-btn" id="invite-btn" title="Convidar parceir*">🔗</button>
         <button class="icon-btn" id="board-btn">📭</button>
         <button class="icon-btn" id="settings-btn">⚙️</button>
       </div>
@@ -709,7 +727,10 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    let currentRoomCode = localStorage.getItem('nosdois_room_code') || null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomFromUrl = urlParams.get('room');
+
+    let currentRoomCode = roomFromUrl || localStorage.getItem('nosdois_room_code') || null;
     let myRole = localStorage.getItem('nosdois_saved_role') || null;
     let roomKeys = ['wall1', 'wall2', 'wall3', 'wall4', 'wall5'];
     let currentRoomIndex = 0;
@@ -734,6 +755,16 @@
     let settings = savedSettings ? JSON.parse(savedSettings) : { bgm: true, clicks: true };
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
     function playClickSound() {
       if (!settings.clicks) return;
       if (audioCtx.state === 'suspended') {
@@ -753,8 +784,8 @@
     }
 
     const roleNames = {
-      boy: 'Teuzin',
-      bay: 'Julia'
+      boy: 'Fulano',
+      bay: 'Fulana'
     };
 
     const roomConfig = {
@@ -926,10 +957,59 @@
       localStorage.removeItem('nosdois_saved_role');
       currentRoomCode = null;
       myRole = null;
+      window.history.replaceState({}, document.title, window.location.pathname);
       document.getElementById('loading-modal').style.display = 'none';
       document.getElementById('role-modal').style.display = 'none';
       document.getElementById('room-modal').style.display = 'flex';
     });
+
+    document.getElementById('invite-btn').addEventListener('click', () => {
+      playClickSound();
+      if (!currentRoomCode) {
+        showToast("Entre em uma sala primeiro!");
+        return;
+      }
+
+      const inviteUrl = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(currentRoomCode)}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Nós Dois - Venha jogar!',
+          text: `Entre na minha sala para jogarmos juntos como Fulano & Fulana!`,
+          url: inviteUrl
+        }).catch(() => {});
+      } else {
+        copyToClipboard(inviteUrl);
+      }
+    });
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("Link de convite copiado!");
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast("Link de convite copiado!");
+      } catch (err) {
+        showToast("Não foi possível copiar o link");
+      }
+      document.body.removeChild(textArea);
+    }
 
     function resetBusyState() {
       if (actionTimeout) {
@@ -978,6 +1058,26 @@
     }
     window.addEventListener('resize', resizeCanvas);
 
+    function autoSelectRoleAndStart(playersData) {
+      let chosenRole = null;
+      if (!playersData) {
+        chosenRole = 'boy';
+      } else if (playersData.boy && !playersData.bay) {
+        chosenRole = 'bay';
+      } else if (playersData.bay && !playersData.boy) {
+        chosenRole = 'boy';
+      } else if (myRole) {
+        chosenRole = myRole;
+      } else {
+        chosenRole = 'boy';
+      }
+
+      myRole = chosenRole;
+      localStorage.setItem('nosdois_saved_role', myRole);
+      localStorage.setItem('nosdois_room_code', currentRoomCode);
+      proceedGameInit();
+    }
+
     function initGame() {
       updateAudioState();
       startNeedsLoop();
@@ -994,6 +1094,21 @@
         }
       }, { once: true });
 
+      if (roomFromUrl) {
+        currentRoomCode = roomFromUrl;
+        document.getElementById('room-modal').style.display = 'none';
+        document.getElementById('role-modal').style.display = 'none';
+        document.getElementById('loading-modal').style.display = 'flex';
+
+        const playersRef = ref(db, `rooms/${currentRoomCode}/game_state/players`);
+        get(playersRef).then((snapshot) => {
+          autoSelectRoleAndStart(snapshot.val());
+        }).catch(() => {
+          autoSelectRoleAndStart(null);
+        });
+        return;
+      }
+
       if (!currentRoomCode) {
         document.getElementById('loading-modal').style.display = 'none';
         document.getElementById('room-modal').style.display = 'flex';
@@ -1007,6 +1122,10 @@
         return;
       }
 
+      proceedGameInit();
+    }
+
+    function proceedGameInit() {
       document.getElementById('room-modal').style.display = 'none';
       document.getElementById('role-modal').style.display = 'none';
       document.getElementById('loading-modal').style.display = 'flex';
