@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Nós Dois - Fulano & Fulana</title>
+  <title>Nós Dois - @085_Teuzinnn</title>
   <style>
     * {
       box-sizing: border-box;
@@ -54,6 +54,7 @@
       padding: 0 10px;
       z-index: 10;
       pointer-events: none;
+      opacity: 0.75;
     }
 
     #top-actions-row {
@@ -207,7 +208,7 @@
       to { transform: rotate(360deg); }
     }
 
-    #room-modal, #role-modal, #cooldown-modal {
+    #room-modal, #role-modal {
       position: absolute;
       top: 0;
       left: 0;
@@ -227,7 +228,7 @@
       padding: 20px;
     }
 
-    #room-modal::before, #role-modal::before, #cooldown-modal::before {
+    #room-modal::before, #role-modal::before {
       content: '';
       position: absolute;
       top: 0;
@@ -236,37 +237,6 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
       z-index: -1;
-    }
-
-    .credits-footer {
-      position: absolute;
-      bottom: 25px;
-      font-size: 14px;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.8);
-      letter-spacing: 1px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    }
-
-    .cooldown-box {
-      background: rgba(0, 0, 0, 0.8);
-      padding: 25px;
-      border-radius: 20px;
-      border: 2px solid #ff4757;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      max-width: 320px;
-      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
-    }
-
-    .cooldown-timer {
-      font-size: 38px;
-      font-weight: bold;
-      color: #ff4757;
-      letter-spacing: 2px;
-      font-family: monospace;
     }
 
     .custom-input {
@@ -587,18 +557,9 @@
     <h3 style="font-weight: normal; letter-spacing: 1px;">Aguarde...</h3>
   </div>
 
-  <div id="cooldown-modal" style="display: none;">
-    <div class="cooldown-box">
-      <h2>⚠️ Punição!</h2>
-      <p id="cooldown-reason">Você descuidou das suas necessidades!</p>
-      <p style="font-size: 13px; color: #ccc;">Aguarde o tempo terminar para voltar a jogar:</p>
-      <div id="cooldown-timer" class="cooldown-timer">05:00</div>
-    </div>
-  </div>
-
   <div id="room-modal">
     <h2>Código da Sala</h2>
-    <input type="text" id="room-code-input" class="custom-input" placeholder="Ex: casal123" maxlength="20">
+    <input type="text" id="room-code-input" class="custom-input" placeholder="Ex: Sala" maxlength="20">
     <button class="role-btn role-btn-room" id="btn-enter-room">Entrar na Sala</button>
   </div>
 
@@ -653,13 +614,13 @@
   </div>
 
   <div id="interaction-modal">
-    <button class="interaction-option" data-action="hug">🤗 Abraçar</button>
-    <button class="interaction-option" data-action="kiss">😘 Beijar</button>
-    <button class="interaction-option" data-action="massage">😌 Massagear</button>
-    <button class="interaction-option" data-action="tickle">😂 Cócegas</button>
-    <button class="interaction-option" data-action="affection">🥰 Carinho</button>
-    <button class="interaction-option" data-action="fight">😡 Brigar</button>
-    <button class="interaction-option" data-action="bye">👋 Até mais</button>
+    <button class="interaction-option" data-action="hug">🤗 Hug</button>
+    <button class="interaction-option" data-action="kiss">😘 Kiss</button>
+    <button class="interaction-option" data-action="massage">😌 Massage</button>
+    <button class="interaction-option" data-action="tickle">😂 Tickie</button>
+    <button class="interaction-option" data-action="affection">🥰 affection</button>
+    <button class="interaction-option" data-action="fight">😡 Fight</button>
+    <button class="interaction-option" data-action="bye">👋 Bye</button>
   </div>
 
   <div id="board-modal">
@@ -675,13 +636,13 @@
       <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="40" enterkeyhint="send" autocomplete="off">
     </form>
     <button class="action-btn" id="room-action-btn"></button>
-    <button class="action-btn" id="interaction-btn">❓️</button>
+    <button class="action-btn" id="interaction-btn">💘</button>
   </div>
 
   <div id="settings-modal">
     <div class="settings-card">
       <div class="settings-header">
-        <h3>Configurações</h3>
+        <h3>Settings</h3>
         <button class="close-btn" id="close-settings-btn">✖</button>
       </div>
       <div class="setting-item">
@@ -747,9 +708,7 @@
       affection: 100
     };
 
-    let cooldownRemaining = parseInt(localStorage.getItem('nosdois_cooldown_time') || '0');
     let needsInterval = null;
-    let cooldownInterval = null;
 
     let savedSettings = localStorage.getItem('nosdois_game_settings');
     let settings = savedSettings ? JSON.parse(savedSettings) : { bgm: true, clicks: true };
@@ -790,10 +749,10 @@
 
     const roomConfig = {
       wall1: { icon: '🕹', text: 'Jogando...', duration: 10000, emoji: '🎮' },
-      wall2: { icon: '😴', text: 'Dormindo...', duration: 20000, emoji: '💤' },
-      wall3: { icon: '😋', text: 'Comendo...', duration: 5000, emoji: '🍔' },
+      wall2: { icon: '😴', text: 'Dormindo...', duration: 10000, emoji: '💤' },
+      wall3: { icon: '😋', text: 'Comendo...', duration: 10000, emoji: '🍔' },
       wall4: { icon: '🧼', text: 'Banhando...', duration: 10000, emoji: '🚿' },
-      wall5: { icon: '🌱', text: 'Relaxando...', duration: 5000, emoji: '💦' }
+      wall5: { icon: '⛹', text: 'Relaxando...', duration: 10000, emoji: '🏀' }
     };
 
     const players = {
@@ -850,8 +809,6 @@
       if (needsInterval) clearInterval(needsInterval);
 
       needsInterval = setInterval(() => {
-        if (cooldownRemaining > 0) return;
-
         let isSleeping = myRole && players[myRole].isBusy && players[myRole].room === 'wall2';
         let isBathing = myRole && players[myRole].isBusy && players[myRole].room === 'wall4';
 
@@ -871,60 +828,7 @@
         needs.affection = Math.max(0, needs.affection - 0.3);
 
         updateBarsUI();
-
-        if (needs.hunger <= 0 || needs.sleep <= 0 || needs.dirt <= 0 || needs.affection <= 0) {
-          let reason = "Faltou carinho e afeto entre vocês!";
-          if (needs.hunger <= 0) reason = "Você ficou com muita fome!";
-          if (needs.sleep <= 0) reason = "Você ficou com muito sono!";
-          if (needs.dirt <= 0) reason = "Você ficou muito sujo!";
-          
-          triggerCooldown(reason);
-        }
       }, 1000);
-    }
-
-    function triggerCooldown(reasonText) {
-      cooldownRemaining = 300;
-      localStorage.setItem('nosdois_cooldown_time', cooldownRemaining.toString());
-
-      needs.hunger = 100;
-      needs.sleep = 100;
-      needs.dirt = 100;
-      needs.affection = 100;
-      updateBarsUI();
-
-      document.getElementById('cooldown-reason').innerText = reasonText;
-      showCooldownModal();
-    }
-
-    function showCooldownModal() {
-      document.getElementById('loading-modal').style.display = 'none';
-      document.getElementById('room-modal').style.display = 'none';
-      document.getElementById('role-modal').style.display = 'none';
-      document.getElementById('cooldown-modal').style.display = 'flex';
-
-      updateCooldownTimerUI();
-
-      if (cooldownInterval) clearInterval(cooldownInterval);
-      cooldownInterval = setInterval(() => {
-        if (cooldownRemaining > 0) {
-          cooldownRemaining--;
-          localStorage.setItem('nosdois_cooldown_time', cooldownRemaining.toString());
-          updateCooldownTimerUI();
-        } else {
-          clearInterval(cooldownInterval);
-          localStorage.removeItem('nosdois_cooldown_time');
-          document.getElementById('cooldown-modal').style.display = 'none';
-          initGame();
-        }
-      }, 1000);
-    }
-
-    function updateCooldownTimerUI() {
-      const minutes = Math.floor(cooldownRemaining / 60);
-      const seconds = cooldownRemaining % 60;
-      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      document.getElementById('cooldown-timer').innerText = formatted;
     }
 
     document.getElementById('toggle-bgm').addEventListener('change', (e) => {
@@ -974,8 +878,8 @@
 
       if (navigator.share) {
         navigator.share({
-          title: 'Nós Dois - Venha jogar!',
-          text: `Entre na minha sala para jogarmos juntos como Fulano & Fulana!`,
+          title: 'Nós Dois - Vamos jogar!',
+          text: `Entre na minha sala e seja meu par!`,
           url: inviteUrl
         }).catch(() => {});
       } else {
@@ -986,7 +890,7 @@
     function copyToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
-          showToast("Link de convite copiado!");
+          showToast("Link copiado!");
         }).catch(() => {
           fallbackCopyText(text);
         });
@@ -1004,9 +908,9 @@
       textArea.select();
       try {
         document.execCommand('copy');
-        showToast("Link de convite copiado!");
+        showToast("Link copiado!");
       } catch (err) {
-        showToast("Não foi possível copiar o link");
+        showToast("Link não copiado!");
       }
       document.body.removeChild(textArea);
     }
@@ -1081,11 +985,6 @@
     function initGame() {
       updateAudioState();
       startNeedsLoop();
-
-      if (cooldownRemaining > 0) {
-        showCooldownModal();
-        return;
-      }
 
       window.addEventListener('click', () => {
         if (settings.bgm && bgMusic.paused) {
@@ -1179,7 +1078,7 @@
         const interactionRef = ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`);
         onValue(interactionRef, (snapshot) => {
           const data = snapshot.val();
-          if (data && Date.now() - data.time < 3000) {
+          if (data && Date.now() - data.time < 5000) {
             applyInteraction(data.action, data.from);
           }
         });
@@ -1367,7 +1266,7 @@
           from: '😌', 
           target: fromRole === 'boy' ? '💆‍♀️' : '💆‍♂️' 
         },
-        tickle: { from: '😁', target: '🤣' },
+        tickle: { from: '😂', target: '🤣' },
         affection: { from: '☺️', target: '🥰' },
         fight: { from: '😡', target: '😓' },
         bye: { from: '👋', target: '👋' }
@@ -1512,7 +1411,7 @@
 
           ctx.restore();
 
-          if (p.reactionEmoji && (Date.now() - p.reactionTime < 3000 || p.isBusy)) {
+          if (p.reactionEmoji && (Date.now() - p.reactionTime < 5000 || p.isBusy)) {
             renderHeadEmoji(xPx, yPx - (charHeight / 2), p.reactionEmoji);
           }
 
@@ -1574,8 +1473,17 @@
       }
 
       if (myP.room === currentRoom) {
-        const dist = Math.hypot(coords.xPct - myP.x, coords.yPct - myP.y);
-        if (dist < 12) {
+        const charHeight = canvas.height * 0.37;
+        const charWidth = charHeight * 0.90;
+        const widthPct = (charWidth / canvas.width) * 100;
+        const heightPct = (charHeight / canvas.height) * 100;
+
+        if (
+          coords.xPct >= myP.x - widthPct / 2 &&
+          coords.xPct <= myP.x + widthPct / 2 &&
+          coords.yPct >= myP.y - heightPct / 2 &&
+          coords.yPct <= myP.y + heightPct / 2
+        ) {
           isDragging = true;
         }
       }
