@@ -3,549 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Nós Dois - @085_Teuzinnn</title>
+  <title>Nós Dois</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #game-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    canvas {
-      background-size: cover;
-      background-position: center;
-      touch-action: none;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    #top-bar-container {
-      position: absolute;
-      top: 10px;
-      left: 0;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 0 10px;
-      z-index: 10;
-      pointer-events: none;
-      opacity: 0.75;
-    }
-
-    #top-actions-row {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      pointer-events: auto;
-    }
-
-    .center-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-arrow {
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-      transition: transform 0.1s, background 0.2s;
-    }
-
-    .nav-arrow:active {
-      transform: scale(0.9);
-    }
-
-    .icon-btn {
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      width: 42px;
-      height: 42px;
-      cursor: pointer;
-      font-size: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-      transition: transform 0.1s;
-    }
-
-    .icon-btn:active {
-      transform: scale(0.9);
-    }
-
-    #stats-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.65);
-      padding: 6px 12px;
-      border-radius: 20px;
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      white-space: nowrap;
-      overflow-x: auto;
-      max-width: 95vw;
-      pointer-events: auto;
-    }
-
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    #bars-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 6px 12px;
-      border-radius: 15px;
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      max-width: 95vw;
-      overflow-x: auto;
-      pointer-events: auto;
-    }
-
-    .bar-group {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-    .bar-container {
-      width: 55px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .bar-fill {
-      height: 100%;
-      width: 100%;
-      transition: width 0.3s linear, background-color 0.3s;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    #game-container { position: relative; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+    canvas { background-size: cover; background-position: center; touch-action: none; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+    #top-bar-container { position: absolute; top: 10px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 10px; z-index: 10; pointer-events: none; opacity: 0.75; }
+    #top-actions-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
+    .center-group { display: flex; align-items: center; gap: 10px; }
+    .nav-arrow { background: rgba(0, 0, 0, 0.6); color: white; border: 2px solid rgba(255, 255, 255, 0.4); width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); transition: transform 0.1s, background 0.2s; }
+    .nav-arrow:active { transform: scale(0.9); }
+    .icon-btn { background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 42px; height: 42px; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); transition: transform 0.1s; }
+    .icon-btn:active { transform: scale(0.9); }
+    #stats-row { display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.65); padding: 6px 12px; border-radius: 20px; backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-weight: bold; font-size: 12px; white-space: nowrap; overflow-x: auto; max-width: 95vw; pointer-events: auto; }
+    .stat-item { display: flex; align-items: center; gap: 3px; }
+    #bars-row { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 0, 0, 0.7); padding: 6px 12px; border-radius: 15px; backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.2); max-width: 95vw; overflow-x: auto; pointer-events: auto; }
+    .bar-group { display: flex; align-items: center; gap: 4px; color: white; font-size: 11px; font-weight: bold; }
+    .bar-container { width: 55px; height: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.3); }
+    .bar-fill { height: 100%; width: 100%; transition: width 0.3s linear, background-color 0.3s; }
     #bar-hunger-fill { background-color: #ff4757; }
     #bar-sleep-fill { background-color: #1e90ff; }
     #bar-dirt-fill { background-color: #ffa502; }
     #bar-affection-fill { background-color: #ff6b81; }
-
-    #loading-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      z-index: 9999;
-      color: white;
-    }
-
-    .spinner {
-      width: 45px;
-      height: 45px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-left-color: #ff4757;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    #room-modal, #role-modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('wall5.png');
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      z-index: 30;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    #room-modal::before, #role-modal::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: -1;
-    }
-
-    .custom-input {
-      padding: 12px 15px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      font-size: 16px;
-      text-align: center;
-      outline: none;
-      width: 220px;
-      user-select: auto;
-      -webkit-user-select: auto;
-    }
-
-    .role-btn {
-      padding: 15px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 220px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
+    #loading-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; z-index: 9999; color: white; }
+    .spinner { width: 45px; height: 45px; border: 4px solid rgba(255, 255, 255, 0.1); border-left-color: #ff4757; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #room-modal, #role-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('wall5.png'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; z-index: 30; color: white; text-align: center; padding: 20px; }
+    #room-modal::before, #role-modal::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1; }
+    .custom-input { padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(0, 0, 0, 0.5); color: white; font-size: 16px; text-align: center; outline: none; width: 220px; user-select: auto; -webkit-user-select: auto; }
+    .role-btn { padding: 15px 30px; font-size: 18px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; width: 220px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
     .role-btn:active { transform: scale(0.95); }
     .role-btn-boy { background: #2ed573; color: white; }
     .role-btn-bay { background: #ff6b81; color: white; }
     .role-btn-room { background: #70a1ff; color: white; }
-
-    #settings-modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 40;
-    }
-
-    .settings-card {
-      background: rgba(0, 0, 0, 0.7);
-      width: 260px;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      flex-direction: column;
-      padding: 15px;
-      gap: 12px;
-      color: white;
-      backdrop-filter: blur(8px);
-    }
-
-    .settings-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 8px;
-    }
-
-    .close-btn {
-      background: transparent;
-      border: none;
-      color: #aaa;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .setting-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .toggle-switch {
-      position: relative;
-      width: 40px;
-      height: 20px;
-      appearance: none;
-      background: rgba(255, 255, 255, 0.2);
-      outline: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
+    #settings-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; display: none; justify-content: center; align-items: center; z-index: 40; }
+    .settings-card { background: rgba(0, 0, 0, 0.7); width: 260px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.2); display: flex; flex-direction: column; padding: 15px; gap: 12px; color: white; backdrop-filter: blur(8px); }
+    .settings-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; }
+    .close-btn { background: transparent; border: none; color: #aaa; font-size: 18px; cursor: pointer; }
+    .setting-item { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+    .toggle-switch { position: relative; width: 40px; height: 20px; appearance: none; background: rgba(255, 255, 255, 0.2); outline: none; border-radius: 10px; cursor: pointer; transition: background 0.3s; }
     .toggle-switch:checked { background: #2ed573; }
-
-    .toggle-switch::before {
-      content: '';
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      top: 3px;
-      left: 3px;
-      background: white;
-      transition: transform 0.3s;
-    }
-
+    .toggle-switch::before { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; top: 3px; left: 3px; background: white; transition: transform 0.3s; }
     .toggle-switch:checked::before { transform: translateX(20px); }
-
-    #chat-container {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      z-index: 10;
-      background: rgba(0, 0, 0, 0.65);
-      padding: 8px 12px;
-      border-radius: 25px;
-      backdrop-filter: blur(5px);
-      max-width: 95vw;
-      align-items: center;
-    }
-
-    #chat-form {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin: 0;
-      padding: 0;
-    }
-
-    #chat-input {
-      border: none;
-      padding: 8px 15px;
-      border-radius: 15px;
-      outline: none;
-      font-size: 14px;
-      width: 180px;
-      user-select: auto;
-      -webkit-user-select: auto;
-    }
-
-    .action-btn {
-      background: #ff4757;
-      color: white;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
+    #chat-container { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; background: rgba(0, 0, 0, 0.65); padding: 8px 12px; border-radius: 25px; backdrop-filter: blur(5px); max-width: 95vw; align-items: center; }
+    #chat-form { display: flex; align-items: center; gap: 6px; margin: 0; padding: 0; }
+    #chat-input { border: none; padding: 8px 15px; border-radius: 15px; outline: none; font-size: 14px; width: 180px; user-select: auto; -webkit-user-select: auto; }
+    .action-btn { background: #ff4757; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
     #interaction-btn { background: #ff6b81; display: none; }
     #room-action-btn { background: #70a1ff; display: none; }
-
-    #interaction-modal {
-      position: absolute;
-      bottom: 75px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      padding: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      width: 180px;
-    }
-
-    .interaction-option {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    #interaction-modal { position: absolute; bottom: 75px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 10px; display: none; flex-direction: column; gap: 6px; z-index: 20; backdrop-filter: blur(10px); width: 180px; }
+    .interaction-option { background: rgba(255, 255, 255, 0.1); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; text-align: left; display: flex; align-items: center; gap: 8px; }
     .interaction-option:active { background: rgba(255, 255, 255, 0.3); }
-
-    #board-modal {
-      position: absolute;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      padding: 12px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 25;
-      backdrop-filter: blur(10px);
-      width: 280px;
-      color: white;
-    }
-
-    #board-messages {
-      max-height: 150px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 13px;
-    }
-
-    .board-msg-item {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 6px 10px;
-      border-radius: 6px;
-      word-break: break-word;
-    }
-
-    #board-form {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-    }
-
-    #board-input {
-      flex: 1;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      outline: none;
-      font-size: 13px;
-      user-select: auto;
-      -webkit-user-select: auto;
-    }
-
-    #board-send-btn {
-      background: #ffa502;
-      color: white;
-      border: none;
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    #photo-modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 40;
-    }
-
-    #photo-modal img {
-      max-width: 80%;
-      max-height: 70%;
-      border-radius: 15px;
-    }
-
-    #close-photo {
-      margin-top: 15px;
-      background: #ff4757;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #toast {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 14px;
-      z-index: 10000;
-      display: none;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
+    #board-modal { position: absolute; top: 100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 12px; display: none; flex-direction: column; gap: 10px; z-index: 25; backdrop-filter: blur(10px); width: 280px; color: white; }
+    #board-messages { max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+    .board-msg-item { background: rgba(255, 255, 255, 0.1); padding: 6px 10px; border-radius: 6px; word-break: break-word; }
+    #board-form { display: flex; gap: 6px; width: 100%; }
+    #board-input { flex: 1; border: none; padding: 8px 12px; border-radius: 8px; outline: none; font-size: 13px; user-select: auto; -webkit-user-select: auto; }
+    #board-send-btn { background: #ffa502; color: white; border: none; width: 38px; height: 38px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+    #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 10000; display: none; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
@@ -581,22 +97,10 @@
     </div>
 
     <div id="bars-row">
-      <div class="bar-group">
-        <span>🍔</span>
-        <div class="bar-container"><div id="bar-hunger-fill" class="bar-fill"></div></div>
-      </div>
-      <div class="bar-group">
-        <span>💤</span>
-        <div class="bar-container"><div id="bar-sleep-fill" class="bar-fill"></div></div>
-      </div>
-      <div class="bar-group">
-        <span>🚿</span>
-        <div class="bar-container"><div id="bar-dirt-fill" class="bar-fill"></div></div>
-      </div>
-      <div class="bar-group">
-        <span>🥰</span>
-        <div class="bar-container"><div id="bar-affection-fill" class="bar-fill"></div></div>
-      </div>
+      <div class="bar-group"><span>🍔</span><div class="bar-container"><div id="bar-hunger-fill" class="bar-fill"></div></div></div>
+      <div class="bar-group"><span>💤</span><div class="bar-container"><div id="bar-sleep-fill" class="bar-fill"></div></div></div>
+      <div class="bar-group"><span>🚿</span><div class="bar-container"><div id="bar-dirt-fill" class="bar-fill"></div></div></div>
+      <div class="bar-group"><span>🥰</span><div class="bar-container"><div id="bar-affection-fill" class="bar-fill"></div></div></div>
     </div>
 
     <div id="stats-row">
@@ -633,7 +137,7 @@
 
   <div id="chat-container">
     <form id="chat-form" action="javascript:void(0);">
-      <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="40" enterkeyhint="send" autocomplete="off">
+      <input type="text" id="chat-input" placeholder="Mensagem..." maxlength="40" enterkeyhint="send" autocomplete="off">
     </form>
     <button class="action-btn" id="room-action-btn"></button>
     <button class="action-btn" id="interaction-btn">💘</button>
@@ -658,11 +162,6 @@
         <input type="checkbox" class="toggle-switch" id="toggle-clicks" checked>
       </div>
     </div>
-  </div>
-
-  <div id="photo-modal">
-    <img id="modal-img" src="photo.png" alt="Recordação">
-    <button id="close-photo">✖️</button>
   </div>
 
   <audio id="bg-music" loop src="music.mp3"></audio>
@@ -696,18 +195,13 @@
     let roomKeys = ['wall1', 'wall2', 'wall3', 'wall4', 'wall5'];
     let currentRoomIndex = 0;
     let currentRoom = roomKeys[currentRoomIndex];
-    let isDragging = false;
+    let draggedTarget = null;
     let lastSaveTime = 0;
     let lastReadBoardTime = parseInt(localStorage.getItem('nosdois_last_read_board_time') || '0');
     let actionTimeout = null;
 
-    let needs = {
-      hunger: 100,
-      sleep: 100,
-      dirt: 100,
-      affection: 100
-    };
-
+    let pet = { x: 70, y: 80, room: 'wall1' };
+    let needs = { hunger: 100, sleep: 100, dirt: 100, affection: 100 };
     let needsInterval = null;
 
     let savedSettings = localStorage.getItem('nosdois_game_settings');
@@ -719,16 +213,12 @@
       const toast = document.getElementById('toast');
       toast.innerText = msg;
       toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 3000);
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
 
     function playClickSound() {
       if (!settings.clicks) return;
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'sine';
@@ -742,10 +232,7 @@
       osc.stop(audioCtx.currentTime + 0.05);
     }
 
-    const roleNames = {
-      boy: 'Fulano',
-      bay: 'Fulana'
-    };
+    const roleNames = { boy: 'Fulano', bay: 'Fulana' };
 
     const roomConfig = {
       wall1: { icon: '🕹', text: 'Jogando...', duration: 10000, emoji: '🎮' },
@@ -756,29 +243,29 @@
     };
 
     const players = {
-      boy: { x: 30, y: 50, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 },
-      bay: { x: 70, y: 50, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 }
+      boy: { x: 20, y: 65, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 },
+      bay: { x: 30, y: 70, room: 'wall1', msg: '', msgTime: 0, isBusy: false, busyText: '', reactionEmoji: '', reactionTime: 0 }
     };
 
     const images = {
       boy: new Image(),
       bay: new Image(),
+      pet: new Image(),
       wall1: new Image(),
       wall2: new Image(),
       wall3: new Image(),
       wall4: new Image(),
-      wall5: new Image(),
-      frame: new Image()
+      wall5: new Image()
     };
 
     images.boy.src = 'boy.png';
     images.bay.src = 'bay.png';
+    images.pet.src = 'pet.png';
     images.wall1.src = 'wall1.png';
     images.wall2.src = 'wall2.png';
     images.wall3.src = 'wall3.png';
     images.wall4.src = 'wall4.png';
     images.wall5.src = 'wall5.png';
-    images.frame.src = 'frame.png';
 
     const bgMusic = document.getElementById('bg-music');
     bgMusic.volume = 0.05;
@@ -789,11 +276,7 @@
 
     function updateAudioState() {
       bgMusic.volume = 0.05;
-      if (settings.bgm) {
-        bgMusic.play().catch(() => {});
-      } else {
-        bgMusic.pause();
-      }
+      if (settings.bgm) { bgMusic.play().catch(() => {}); } else { bgMusic.pause(); }
       document.getElementById('toggle-bgm').checked = settings.bgm;
       document.getElementById('toggle-clicks').checked = settings.clicks;
     }
@@ -807,26 +290,15 @@
 
     function startNeedsLoop() {
       if (needsInterval) clearInterval(needsInterval);
-
       needsInterval = setInterval(() => {
         let isSleeping = myRole && players[myRole].isBusy && players[myRole].room === 'wall2';
         let isBathing = myRole && players[myRole].isBusy && players[myRole].room === 'wall4';
 
-        if (isSleeping) {
-          needs.sleep = Math.min(100, needs.sleep + 5);
-        } else {
-          needs.sleep = Math.max(0, needs.sleep - 0.2);
-        }
-
-        if (isBathing) {
-          needs.dirt = Math.min(100, needs.dirt + 10);
-        } else {
-          needs.dirt = Math.max(0, needs.dirt - 0.15);
-        }
+        if (isSleeping) { needs.sleep = Math.min(100, needs.sleep + 5); } else { needs.sleep = Math.max(0, needs.sleep - 0.2); }
+        if (isBathing) { needs.dirt = Math.min(100, needs.dirt + 10); } else { needs.dirt = Math.max(0, needs.dirt - 0.15); }
 
         needs.hunger = Math.max(0, needs.hunger - 0.25);
         needs.affection = Math.max(0, needs.affection - 0.3);
-
         updateBarsUI();
       }, 1000);
     }
@@ -873,15 +345,9 @@
         showToast("Entre em uma sala primeiro!");
         return;
       }
-
       const inviteUrl = `${window.location.origin}${window.location.pathname}?room=${encodeURIComponent(currentRoomCode)}`;
-
       if (navigator.share) {
-        navigator.share({
-          title: 'Nós Dois - Vamos jogar!',
-          text: `Entre na minha sala e seja meu par!`,
-          url: inviteUrl
-        }).catch(() => {});
+        navigator.share({ title: 'Nós Dois', text: `Entre na minha sala!`, url: inviteUrl }).catch(() => {});
       } else {
         copyToClipboard(inviteUrl);
       }
@@ -889,11 +355,7 @@
 
     function copyToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast("Link copiado!");
-        }).catch(() => {
-          fallbackCopyText(text);
-        });
+        navigator.clipboard.writeText(text).then(() => showToast("Link copiado!")).catch(() => fallbackCopyText(text));
       } else {
         fallbackCopyText(text);
       }
@@ -906,20 +368,12 @@
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      try {
-        document.execCommand('copy');
-        showToast("Link copiado!");
-      } catch (err) {
-        showToast("Link não copiado!");
-      }
+      try { document.execCommand('copy'); showToast("Link copiado!"); } catch (err) { showToast("Erro ao copiar!"); }
       document.body.removeChild(textArea);
     }
 
     function resetBusyState() {
-      if (actionTimeout) {
-        clearTimeout(actionTimeout);
-        actionTimeout = null;
-      }
+      if (actionTimeout) { clearTimeout(actionTimeout); actionTimeout = null; }
       if (myRole && players[myRole]) {
         players[myRole].isBusy = false;
         players[myRole].busyText = '';
@@ -930,13 +384,13 @@
 
     function updateRoomDisplay() {
       currentRoom = roomKeys[currentRoomIndex];
-      
       if (myRole) {
         players[myRole].room = currentRoom;
+        pet.room = currentRoom;
         resetBusyState();
         savePositionThrottled(true);
+        savePetPositionThrottled(true);
       }
-      
       document.getElementById('interaction-modal').style.display = 'none';
       document.getElementById('board-modal').style.display = 'none';
       checkControlsVisibility();
@@ -964,17 +418,11 @@
 
     function autoSelectRoleAndStart(playersData) {
       let chosenRole = null;
-      if (!playersData) {
-        chosenRole = 'boy';
-      } else if (playersData.boy && !playersData.bay) {
-        chosenRole = 'bay';
-      } else if (playersData.bay && !playersData.boy) {
-        chosenRole = 'boy';
-      } else if (myRole) {
-        chosenRole = myRole;
-      } else {
-        chosenRole = 'boy';
-      }
+      if (!playersData) { chosenRole = 'boy'; }
+      else if (playersData.boy && !playersData.bay) { chosenRole = 'bay'; }
+      else if (playersData.bay && !playersData.boy) { chosenRole = 'boy'; }
+      else if (myRole) { chosenRole = myRole; }
+      else { chosenRole = 'boy'; }
 
       myRole = chosenRole;
       localStorage.setItem('nosdois_saved_role', myRole);
@@ -999,12 +447,9 @@
         document.getElementById('role-modal').style.display = 'none';
         document.getElementById('loading-modal').style.display = 'flex';
 
-        const playersRef = ref(db, `rooms/${currentRoomCode}/game_state/players`);
-        get(playersRef).then((snapshot) => {
+        get(ref(db, `rooms/${currentRoomCode}/game_state/players`)).then((snapshot) => {
           autoSelectRoleAndStart(snapshot.val());
-        }).catch(() => {
-          autoSelectRoleAndStart(null);
-        });
+        }).catch(() => autoSelectRoleAndStart(null));
         return;
       }
 
@@ -1029,14 +474,12 @@
       document.getElementById('role-modal').style.display = 'none';
       document.getElementById('loading-modal').style.display = 'flex';
 
-      const myRef = ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`);
-      get(myRef).then((snapshot) => {
+      get(ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`)).then((snapshot) => {
         const data = snapshot.val();
         if (data && data.room) {
           currentRoom = data.room;
           currentRoomIndex = roomKeys.indexOf(currentRoom);
           if (currentRoomIndex === -1) currentRoomIndex = 0;
-          
           players[myRole].x = data.x !== undefined ? data.x : players[myRole].x;
           players[myRole].y = data.y !== undefined ? data.y : players[myRole].y;
           players[myRole].room = data.room;
@@ -1046,16 +489,11 @@
           players[myRole].msgTime = data.msgTime || 0;
         }
 
-        const playersRef = ref(db, `rooms/${currentRoomCode}/game_state/players`);
-        onValue(playersRef, (snapshot) => {
+        onValue(ref(db, `rooms/${currentRoomCode}/game_state/players`), (snapshot) => {
           const playersData = snapshot.val();
           if (playersData) {
-            if (playersData.boy) {
-              players.boy = { ...players.boy, ...playersData.boy };
-            }
-            if (playersData.bay) {
-              players.bay = { ...players.bay, ...playersData.bay };
-            }
+            if (playersData.boy) players.boy = { ...players.boy, ...playersData.boy };
+            if (playersData.bay) players.bay = { ...players.bay, ...playersData.bay };
           }
           if (!players.boy.room) players.boy.room = 'wall1';
           if (!players.bay.room) players.bay.room = 'wall1';
@@ -1064,8 +502,15 @@
           render();
         });
 
-        const statsRef = ref(db, `rooms/${currentRoomCode}/game_state/stats`);
-        onValue(statsRef, (snapshot) => {
+        onValue(ref(db, `rooms/${currentRoomCode}/game_state/pet`), (snapshot) => {
+          const petData = snapshot.val();
+          if (petData) {
+            pet = { ...pet, ...petData };
+            render();
+          }
+        });
+
+        onValue(ref(db, `rooms/${currentRoomCode}/game_state/stats`), (snapshot) => {
           const statsData = snapshot.val() || {};
           document.getElementById('stat-kiss').innerText = statsData.kiss || 0;
           document.getElementById('stat-hug').innerText = statsData.hug || 0;
@@ -1075,25 +520,19 @@
           document.getElementById('stat-fight').innerText = statsData.fight || 0;
         });
 
-        const interactionRef = ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`);
-        onValue(interactionRef, (snapshot) => {
+        onValue(ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`), (snapshot) => {
           const data = snapshot.val();
           if (data && Date.now() - data.time < 5000) {
             applyInteraction(data.action, data.from);
           }
         });
 
-        const boardRef = ref(db, `rooms/${currentRoomCode}/game_state/board_messages`);
-        onValue(boardRef, (snapshot) => {
-          const data = snapshot.val();
-          renderBoardMessages(data);
+        onValue(ref(db, `rooms/${currentRoomCode}/game_state/board_messages`), (snapshot) => {
+          renderBoardMessages(snapshot.val());
         });
 
         resizeCanvas();
-
-        setTimeout(() => {
-          document.getElementById('loading-modal').style.display = 'none';
-        }, 300);
+        setTimeout(() => { document.getElementById('loading-modal').style.display = 'none'; }, 300);
       });
     }
 
@@ -1121,7 +560,6 @@
       const interactionBtn = document.getElementById('interaction-btn');
       const roomActionBtn = document.getElementById('room-action-btn');
       const chatInput = document.getElementById('chat-input');
-
       const isBusy = myRole && players[myRole].isBusy;
 
       if (isBusy) {
@@ -1131,7 +569,7 @@
         document.getElementById('interaction-modal').style.display = 'none';
       } else {
         chatInput.disabled = false;
-        chatInput.placeholder = "Digite uma mensagem...";
+        chatInput.placeholder = "Mensagem...";
       }
 
       const roomData = roomConfig[currentRoom];
@@ -1160,9 +598,7 @@
       playClickSound();
       if (myRole && players[myRole].isBusy) return;
       if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
-      
-      const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
-      if (dist >= 20) return;
+      if (Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y) >= 20) return;
 
       document.getElementById('board-modal').style.display = 'none';
       const modal = document.getElementById('interaction-modal');
@@ -1175,7 +611,6 @@
       const modal = document.getElementById('board-modal');
       const isOpening = modal.style.display !== 'flex';
       modal.style.display = isOpening ? 'flex' : 'none';
-      
       if (isOpening) {
         lastReadBoardTime = Date.now();
         localStorage.setItem('nosdois_last_read_board_time', lastReadBoardTime.toString());
@@ -1186,7 +621,6 @@
     document.getElementById('room-action-btn').addEventListener('click', () => {
       playClickSound();
       if (!myRole || !currentRoomCode) return;
-      
       const config = roomConfig[currentRoom];
       if (!config) return;
 
@@ -1197,10 +631,7 @@
         return;
       }
 
-      if (currentRoom === 'wall3') {
-        needs.hunger = Math.min(100, needs.hunger + 30);
-      }
-      
+      if (currentRoom === 'wall3') needs.hunger = Math.min(100, needs.hunger + 30);
       updateBarsUI();
 
       players[myRole].isBusy = true;
@@ -1227,17 +658,14 @@
         playClickSound();
         if (myRole && players[myRole].isBusy) return;
         if (!currentRoomCode) return;
-
         if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
-        const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
-        if (dist >= 20) return;
+        if (Math.hypot(players.boy.x - players.bay.x, players.bay.y - players.bay.y) >= 20) return;
         
         const action = e.currentTarget.getAttribute('data-action');
         document.getElementById('interaction-modal').style.display = 'none';
         
         if (action) {
-          const statRef = ref(db, `rooms/${currentRoomCode}/game_state/stats/${action}`);
-          runTransaction(statRef, (currentValue) => (currentValue || 0) + 1);
+          runTransaction(ref(db, `rooms/${currentRoomCode}/game_state/stats/${action}`), (val) => (val || 0) + 1);
         }
 
         set(ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`), {
@@ -1252,20 +680,14 @@
       const now = Date.now();
       const targetRole = fromRole === 'boy' ? 'bay' : 'boy';
 
-      if (action === 'fight') {
-        needs.affection = Math.max(0, needs.affection - 5);
-      } else if (['hug', 'kiss', 'massage', 'tickle', 'affection'].includes(action)) {
-        needs.affection = Math.min(100, needs.affection + 25);
-      }
+      if (action === 'fight') { needs.affection = Math.max(0, needs.affection - 5); }
+      else if (['hug', 'kiss', 'massage', 'tickle', 'affection'].includes(action)) { needs.affection = Math.min(100, needs.affection + 25); }
       updateBarsUI();
 
       const map = {
         hug: { from: '🤗', target: '🤗' },
         kiss: { from: '😘', target: '😘' },
-        massage: { 
-          from: '😌', 
-          target: fromRole === 'boy' ? '💆‍♀️' : '💆‍♂️' 
-        },
+        massage: { from: '😌', target: fromRole === 'boy' ? '💆‍♀️' : '💆‍♂️' },
         tickle: { from: '😂', target: '🤣' },
         affection: { from: '☺️', target: '🥰' },
         fight: { from: '😡', target: '😓' },
@@ -1284,7 +706,6 @@
           set(ref(db, `rooms/${currentRoomCode}/game_state/players/${targetRole}/reactionEmoji`), map[action].target);
           set(ref(db, `rooms/${currentRoomCode}/game_state/players/${targetRole}/reactionTime`), now);
         }
-
         render();
       }
     }
@@ -1300,16 +721,12 @@
           item.className = 'board-msg-item';
           item.innerHTML = `<strong>${msgObj.author}:</strong> ${msgObj.text}`;
           container.appendChild(item);
-
-          if (msgObj.time && msgObj.time > lastReadBoardTime) {
-            hasNewMessage = true;
-          }
+          if (msgObj.time && msgObj.time > lastReadBoardTime) hasNewMessage = true;
         });
         container.scrollTop = container.scrollHeight;
       }
 
-      const boardModalVisible = document.getElementById('board-modal').style.display === 'flex';
-      if (boardModalVisible) {
+      if (document.getElementById('board-modal').style.display === 'flex') {
         lastReadBoardTime = Date.now();
         localStorage.setItem('nosdois_last_read_board_time', lastReadBoardTime.toString());
         document.getElementById('board-btn').innerText = '📭';
@@ -1323,9 +740,8 @@
       const input = document.getElementById('board-input');
       const text = input.value.trim();
       if (text && myRole && currentRoomCode) {
-        const boardRef = ref(db, `rooms/${currentRoomCode}/game_state/board_messages`);
         const now = Date.now();
-        push(boardRef, {
+        push(ref(db, `rooms/${currentRoomCode}/game_state/board_messages`), {
           author: roleNames[myRole],
           text: text,
           time: now
@@ -1346,8 +762,7 @@
     function renderSpeechBubble(x, y, text) {
       ctx.font = '14px Arial';
       const textWidth = ctx.measureText(text).width;
-      const padding = 10;
-      const bubbleWidth = textWidth + padding * 2;
+      const bubbleWidth = textWidth + 20;
       const bubbleHeight = 30;
       const bubbleX = x - bubbleWidth / 2;
       const bubbleY = y - 25;
@@ -1381,12 +796,23 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      if (currentRoom === 'wall1' && images.frame.complete && images.frame.naturalWidth !== 0) {
-        ctx.drawImage(images.frame, canvas.width * 0.45, canvas.height * 0.2, 80, 80);
-      }
-
       const charHeight = canvas.height * 0.37;
       const charWidth = charHeight * 0.90;
+
+      if (pet.room === currentRoom) {
+        const petPx = (pet.x / 100) * canvas.width;
+        const petPy = (pet.y / 100) * canvas.height;
+        const petSize = charHeight * 0.45;
+
+        if (images.pet.complete && images.pet.naturalWidth !== 0) {
+          ctx.drawImage(images.pet, petPx - petSize / 2, petPy - petSize / 2, petSize, petSize);
+        } else {
+          ctx.font = '40px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText('🐶', petPx, petPy);
+          ctx.textAlign = 'left';
+        }
+      }
 
       ['boy', 'bay'].forEach(role => {
         const p = players[role];
@@ -1396,10 +822,7 @@
 
           ctx.save();
           ctx.translate(xPx, yPx);
-
-          if (p.isBusy && p.room === 'wall2') {
-            ctx.rotate(90 * Math.PI / 180);
-          }
+          if (p.isBusy && p.room === 'wall2') ctx.rotate(90 * Math.PI / 180);
 
           const img = images[role];
           if (img.complete && img.naturalWidth !== 0) {
@@ -1408,7 +831,6 @@
             ctx.fillStyle = role === 'boy' ? '#2ed573' : '#ff6b81';
             ctx.fillRect(-charWidth / 2, -charHeight / 2, charWidth, charHeight);
           }
-
           ctx.restore();
 
           if (p.reactionEmoji && (Date.now() - p.reactionTime < 5000 || p.isBusy)) {
@@ -1448,7 +870,6 @@
       const rect = canvas.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
       return {
         xPct: ((clientX - rect.left) / canvas.width) * 100,
         yPct: ((clientY - rect.top) / canvas.height) * 100
@@ -1457,57 +878,62 @@
 
     function startDrag(e) {
       if (!myRole) return;
-      if (players[myRole].isBusy) return;
-
       const coords = getCoordinates(e);
-      const myP = players[myRole];
+      const charHeight = canvas.height * 0.37;
+      const charWidth = charHeight * 0.90;
+      const petSize = charHeight * 0.45;
 
-      if (currentRoom === 'wall1') {
-        const frameX = 45;
-        const frameY = 20;
-        if (Math.abs(coords.xPct - frameX) < 5 && Math.abs(coords.yPct - frameY) < 5) {
-          playClickSound();
-          document.getElementById('photo-modal').style.display = 'flex';
-          return;
-        }
+      const petWidthPct = (petSize / canvas.width) * 100;
+      const petHeightPct = (petSize / canvas.height) * 100;
+
+      if (
+        pet.room === currentRoom &&
+        coords.xPct >= pet.x - petWidthPct / 2 &&
+        coords.xPct <= pet.x + petWidthPct / 2 &&
+        coords.yPct >= pet.y - petHeightPct / 2 &&
+        coords.yPct <= pet.y + petHeightPct / 2
+      ) {
+        draggedTarget = 'pet';
+        return;
       }
 
-      if (myP.room === currentRoom) {
-        const charHeight = canvas.height * 0.37;
-        const charWidth = charHeight * 0.90;
+      if (!players[myRole].isBusy && players[myRole].room === currentRoom) {
         const widthPct = (charWidth / canvas.width) * 100;
         const heightPct = (charHeight / canvas.height) * 100;
 
         if (
-          coords.xPct >= myP.x - widthPct / 2 &&
-          coords.xPct <= myP.x + widthPct / 2 &&
-          coords.yPct >= myP.y - heightPct / 2 &&
-          coords.yPct <= myP.y + heightPct / 2
+          coords.xPct >= players[myRole].x - widthPct / 2 &&
+          coords.xPct <= players[myRole].x + widthPct / 2 &&
+          coords.yPct >= players[myRole].y - heightPct / 2 &&
+          coords.yPct <= players[myRole].y + heightPct / 2
         ) {
-          isDragging = true;
+          draggedTarget = 'player';
         }
       }
     }
 
     function moveDrag(e) {
-      if (!isDragging || !myRole) return;
-      if (players[myRole].isBusy) {
-        isDragging = false;
-        return;
-      }
+      if (!draggedTarget || !myRole) return;
       e.preventDefault();
       const coords = getCoordinates(e);
 
-      players[myRole].x = Math.max(5, Math.min(95, coords.xPct));
-      players[myRole].y = Math.max(5, Math.min(95, coords.yPct));
-
-      checkControlsVisibility();
-      render();
-      savePositionThrottled();
+      if (draggedTarget === 'player') {
+        if (players[myRole].isBusy) { draggedTarget = null; return; }
+        players[myRole].x = Math.max(5, Math.min(95, coords.xPct));
+        players[myRole].y = Math.max(5, Math.min(95, coords.yPct));
+        checkControlsVisibility();
+        render();
+        savePositionThrottled();
+      } else if (draggedTarget === 'pet') {
+        pet.x = Math.max(5, Math.min(95, coords.xPct));
+        pet.y = Math.max(5, Math.min(95, coords.yPct));
+        render();
+        savePetPositionThrottled();
+      }
     }
 
     function stopDrag() {
-      isDragging = false;
+      draggedTarget = null;
     }
 
     canvas.addEventListener('mousedown', startDrag);
@@ -1517,11 +943,6 @@
     canvas.addEventListener('touchstart', startDrag, { passive: false });
     window.addEventListener('touchmove', moveDrag, { passive: false });
     window.addEventListener('touchend', stopDrag);
-
-    document.getElementById('close-photo').addEventListener('click', () => {
-      playClickSound();
-      document.getElementById('photo-modal').style.display = 'none';
-    });
 
     function savePositionThrottled(force = false) {
       const now = Date.now();
@@ -1537,6 +958,19 @@
           busyText: players[myRole].busyText || '',
           reactionEmoji: players[myRole].reactionEmoji || '',
           reactionTime: players[myRole].reactionTime || 0
+        });
+        lastSaveTime = now;
+      }
+    }
+
+    function savePetPositionThrottled(force = false) {
+      const now = Date.now();
+      if (force || now - lastSaveTime > 50) {
+        if (!currentRoomCode) return;
+        set(ref(db, `rooms/${currentRoomCode}/game_state/pet`), {
+          x: pet.x,
+          y: pet.y,
+          room: pet.room
         });
         lastSaveTime = now;
       }
