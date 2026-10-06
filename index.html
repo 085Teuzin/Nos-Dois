@@ -199,8 +199,9 @@
     let lastSaveTime = 0;
     let lastReadBoardTime = parseInt(localStorage.getItem('nosdois_last_read_board_time') || '0');
     let actionTimeout = null;
+    let lastPetClickTime = 0;
 
-    let pet = { x: 70, y: 80, room: 'wall1' };
+    let pet = { x: 70, y: 80, room: 'wall1', emoji: '', emojiTime: 0 };
     let needs = { hunger: 100, sleep: 100, dirt: 100, affection: 100 };
     let needsInterval = null;
 
@@ -211,7 +212,7 @@
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
-      toast.innerText = msg;
+      toast.innerText = msg || '';
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
@@ -291,13 +292,22 @@
     function startNeedsLoop() {
       if (needsInterval) clearInterval(needsInterval);
       needsInterval = setInterval(() => {
-        let isSleeping = myRole && players[myRole].isBusy && players[myRole].room === 'wall2';
-        let isBathing = myRole && players[myRole].isBusy && players[myRole].room === 'wall4';
+        if (myRole && players[myRole] && players[myRole].isBusy) {
+          const room = players[myRole].room;
+          if (room === 'wall3') needs.hunger = Math.min(100, needs.hunger + 10);
+          else needs.hunger = Math.max(0, needs.hunger - 0.25);
 
-        if (isSleeping) { needs.sleep = Math.min(100, needs.sleep + 5); } else { needs.sleep = Math.max(0, needs.sleep - 0.2); }
-        if (isBathing) { needs.dirt = Math.min(100, needs.dirt + 10); } else { needs.dirt = Math.max(0, needs.dirt - 0.15); }
+          if (room === 'wall2') needs.sleep = Math.min(100, needs.sleep + 10);
+          else needs.sleep = Math.max(0, needs.sleep - 0.2);
 
-        needs.hunger = Math.max(0, needs.hunger - 0.25);
+          if (room === 'wall4') needs.dirt = Math.min(100, needs.dirt + 10);
+          else needs.dirt = Math.max(0, needs.dirt - 0.15);
+        } else {
+          needs.hunger = Math.max(0, needs.hunger - 0.25);
+          needs.sleep = Math.max(0, needs.sleep - 0.2);
+          needs.dirt = Math.max(0, needs.dirt - 0.15);
+        }
+
         needs.affection = Math.max(0, needs.affection - 0.3);
         updateBarsUI();
       }, 1000);
@@ -384,7 +394,7 @@
 
     function updateRoomDisplay() {
       currentRoom = roomKeys[currentRoomIndex];
-      if (myRole) {
+      if (myRole && players[myRole]) {
         players[myRole].room = currentRoom;
         pet.room = currentRoom;
         resetBusyState();
@@ -477,12 +487,12 @@
       get(ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`)).then((snapshot) => {
         const data = snapshot.val();
         if (data && data.room) {
-          currentRoom = data.room;
+          currentRoom = data.room || 'wall1';
           currentRoomIndex = roomKeys.indexOf(currentRoom);
           if (currentRoomIndex === -1) currentRoomIndex = 0;
           players[myRole].x = data.x !== undefined ? data.x : players[myRole].x;
           players[myRole].y = data.y !== undefined ? data.y : players[myRole].y;
-          players[myRole].room = data.room;
+          players[myRole].room = data.room || 'wall1';
           players[myRole].isBusy = data.isBusy || false;
           players[myRole].busyText = data.busyText || '';
           players[myRole].msg = data.msg || '';
@@ -506,6 +516,7 @@
           const petData = snapshot.val();
           if (petData) {
             pet = { ...pet, ...petData };
+            if (!pet.room) pet.room = 'wall1';
             render();
           }
         });
@@ -522,7 +533,7 @@
 
         onValue(ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`), (snapshot) => {
           const data = snapshot.val();
-          if (data && Date.now() - data.time < 5000) {
+          if (data && Date.now() - (data.time || 0) < 5000) {
             applyInteraction(data.action, data.from);
           }
         });
@@ -533,6 +544,8 @@
 
         resizeCanvas();
         setTimeout(() => { document.getElementById('loading-modal').style.display = 'none'; }, 300);
+      }).catch(() => {
+        document.getElementById('loading-modal').style.display = 'none';
       });
     }
 
@@ -560,11 +573,11 @@
       const interactionBtn = document.getElementById('interaction-btn');
       const roomActionBtn = document.getElementById('room-action-btn');
       const chatInput = document.getElementById('chat-input');
-      const isBusy = myRole && players[myRole].isBusy;
+      const isBusy = myRole && players[myRole] && players[myRole].isBusy;
 
       if (isBusy) {
         chatInput.disabled = true;
-        chatInput.placeholder = players[myRole].busyText || "Você está ocupado...";
+        chatInput.placeholder = (players[myRole] && players[myRole].busyText) ? players[myRole].busyText : "Você está ocupado...";
         interactionBtn.style.display = 'none';
         document.getElementById('interaction-modal').style.display = 'none';
       } else {
@@ -575,12 +588,12 @@
       const roomData = roomConfig[currentRoom];
       if (roomData) {
         roomActionBtn.style.display = 'flex';
-        roomActionBtn.innerText = roomData.icon;
+        roomActionBtn.innerText = roomData.icon || '';
       } else {
         roomActionBtn.style.display = 'none';
       }
 
-      if (!isBusy && players.boy.room === currentRoom && players.bay.room === currentRoom) {
+      if (!isBusy && players.boy && players.bay && players.boy.room === currentRoom && players.bay.room === currentRoom) {
         const dist = Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y);
         if (dist < 20) {
           interactionBtn.style.display = 'flex';
@@ -596,8 +609,8 @@
 
     document.getElementById('interaction-btn').addEventListener('click', () => {
       playClickSound();
-      if (myRole && players[myRole].isBusy) return;
-      if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
+      if (myRole && players[myRole] && players[myRole].isBusy) return;
+      if (!players.boy || !players.bay || players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
       if (Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y) >= 20) return;
 
       document.getElementById('board-modal').style.display = 'none';
@@ -620,7 +633,7 @@
 
     document.getElementById('room-action-btn').addEventListener('click', () => {
       playClickSound();
-      if (!myRole || !currentRoomCode) return;
+      if (!myRole || !currentRoomCode || !players[myRole]) return;
       const config = roomConfig[currentRoom];
       if (!config) return;
 
@@ -631,12 +644,9 @@
         return;
       }
 
-      if (currentRoom === 'wall3') needs.hunger = Math.min(100, needs.hunger + 30);
-      updateBarsUI();
-
       players[myRole].isBusy = true;
-      players[myRole].busyText = config.text;
-      players[myRole].reactionEmoji = config.emoji;
+      players[myRole].busyText = config.text || '';
+      players[myRole].reactionEmoji = config.emoji || '';
       players[myRole].reactionTime = Date.now();
       
       checkControlsVisibility();
@@ -656,10 +666,10 @@
     document.querySelectorAll('.interaction-option').forEach(btn => {
       btn.addEventListener('click', (e) => {
         playClickSound();
-        if (myRole && players[myRole].isBusy) return;
-        if (!currentRoomCode) return;
+        if (myRole && players[myRole] && players[myRole].isBusy) return;
+        if (!currentRoomCode || !players.boy || !players.bay) return;
         if (players.boy.room !== currentRoom || players.bay.room !== currentRoom) return;
-        if (Math.hypot(players.boy.x - players.bay.x, players.bay.y - players.bay.y) >= 20) return;
+        if (Math.hypot(players.boy.x - players.bay.x, players.boy.y - players.bay.y) >= 20) return;
         
         const action = e.currentTarget.getAttribute('data-action');
         document.getElementById('interaction-modal').style.display = 'none';
@@ -669,19 +679,31 @@
         }
 
         set(ref(db, `rooms/${currentRoomCode}/game_state/interaction_event`), {
-          action: action,
-          from: myRole,
+          action: action || '',
+          from: myRole || '',
           time: Date.now()
         });
       });
     });
 
     function applyInteraction(action, fromRole) {
+      if (!action || !fromRole || !players[fromRole]) return;
       const now = Date.now();
       const targetRole = fromRole === 'boy' ? 'bay' : 'boy';
+      if (!players[targetRole]) return;
 
-      if (action === 'fight') { needs.affection = Math.max(0, needs.affection - 5); }
-      else if (['hug', 'kiss', 'massage', 'tickle', 'affection'].includes(action)) { needs.affection = Math.min(100, needs.affection + 25); }
+      if (action === 'fight') { 
+        needs.affection = Math.max(0, needs.affection - 5); 
+      } else if (['hug', 'kiss', 'massage', 'tickle', 'affection'].includes(action)) { 
+        get(ref(db, `rooms/${currentRoomCode}/game_state/stats`)).then(snapshot => {
+          const stats = snapshot.val() || {};
+          const totalRomantic = (stats.hug || 0) + (stats.kiss || 0) + (stats.massage || 0) + (stats.tickle || 0) + (stats.affection || 0);
+          if (totalRomantic >= 10) {
+            needs.affection = Math.min(100, needs.affection + 10);
+          }
+          updateBarsUI();
+        });
+      }
       updateBarsUI();
 
       const map = {
@@ -689,7 +711,7 @@
         kiss: { from: '😘', target: '😘' },
         massage: { from: '😌', target: fromRole === 'boy' ? '💆‍♀️' : '💆‍♂️' },
         tickle: { from: '😂', target: '🤣' },
-        affection: { from: '☺️', target: '🥰' },
+        affection: { from: '☺️️', target: '🥰' },
         fight: { from: '😡', target: '😓' },
         bye: { from: '👋', target: '👋' }
       };
@@ -717,9 +739,12 @@
 
       if (data) {
         Object.values(data).forEach(msgObj => {
+          if (!msgObj) return;
+          const author = msgObj.author || 'Anônimo';
+          const text = msgObj.text || '';
           const item = document.createElement('div');
           item.className = 'board-msg-item';
-          item.innerHTML = `<strong>${msgObj.author}:</strong> ${msgObj.text}`;
+          item.innerHTML = `<strong>${author}:</strong> ${text}`;
           container.appendChild(item);
           if (msgObj.time && msgObj.time > lastReadBoardTime) hasNewMessage = true;
         });
@@ -742,7 +767,7 @@
       if (text && myRole && currentRoomCode) {
         const now = Date.now();
         push(ref(db, `rooms/${currentRoomCode}/game_state/board_messages`), {
-          author: roleNames[myRole],
+          author: roleNames[myRole] || 'Anônimo',
           text: text,
           time: now
         });
@@ -760,6 +785,7 @@
     });
 
     function renderSpeechBubble(x, y, text) {
+      if (!text) return;
       ctx.font = '14px Arial';
       const textWidth = ctx.measureText(text).width;
       const bubbleWidth = textWidth + 20;
@@ -779,6 +805,7 @@
     }
 
     function renderHeadEmoji(x, y, emoji) {
+      if (!emoji) return;
       ctx.font = '30px Arial';
       ctx.textAlign = 'center';
       ctx.fillText(emoji, x, y - 10);
@@ -789,7 +816,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const bgImg = images[currentRoom];
-      if (bgImg.complete && bgImg.naturalWidth !== 0) {
+      if (bgImg && bgImg.complete && bgImg.naturalWidth !== 0) {
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
       } else {
         ctx.fillStyle = "#2c3e50";
@@ -799,12 +826,12 @@
       const charHeight = canvas.height * 0.37;
       const charWidth = charHeight * 0.90;
 
-      if (pet.room === currentRoom) {
-        const petPx = (pet.x / 100) * canvas.width;
-        const petPy = (pet.y / 100) * canvas.height;
+      if (pet && pet.room === currentRoom) {
+        const petPx = ((pet.x || 50) / 100) * canvas.width;
+        const petPy = ((pet.y || 50) / 100) * canvas.height;
         const petSize = charHeight * 0.45;
 
-        if (images.pet.complete && images.pet.naturalWidth !== 0) {
+        if (images.pet && images.pet.complete && images.pet.naturalWidth !== 0) {
           ctx.drawImage(images.pet, petPx - petSize / 2, petPy - petSize / 2, petSize, petSize);
         } else {
           ctx.font = '40px Arial';
@@ -812,20 +839,24 @@
           ctx.fillText('🐶', petPx, petPy);
           ctx.textAlign = 'left';
         }
+
+        if (pet.emoji && Date.now() - (pet.emojiTime || 0) < 3000) {
+          renderHeadEmoji(petPx, petPy - (petSize / 2), pet.emoji);
+        }
       }
 
       ['boy', 'bay'].forEach(role => {
         const p = players[role];
-        if (p.room === currentRoom) {
-          const xPx = (p.x / 100) * canvas.width;
-          const yPx = (p.y / 100) * canvas.height;
+        if (p && p.room === currentRoom) {
+          const xPx = ((p.x || 0) / 100) * canvas.width;
+          const yPx = ((p.y || 0) / 100) * canvas.height;
 
           ctx.save();
           ctx.translate(xPx, yPx);
           if (p.isBusy && p.room === 'wall2') ctx.rotate(90 * Math.PI / 180);
 
           const img = images[role];
-          if (img.complete && img.naturalWidth !== 0) {
+          if (img && img.complete && img.naturalWidth !== 0) {
             ctx.drawImage(img, -charWidth / 2, -charHeight / 2, charWidth, charHeight);
           } else {
             ctx.fillStyle = role === 'boy' ? '#2ed573' : '#ff6b81';
@@ -833,11 +864,11 @@
           }
           ctx.restore();
 
-          if (p.reactionEmoji && (Date.now() - p.reactionTime < 5000 || p.isBusy)) {
+          if (p.reactionEmoji && (Date.now() - (p.reactionTime || 0) < 5000 || p.isBusy)) {
             renderHeadEmoji(xPx, yPx - (charHeight / 2), p.reactionEmoji);
           }
 
-          if (p.msg && Date.now() - p.msgTime < 5000) {
+          if (p.msg && Date.now() - (p.msgTime || 0) < 5000) {
             renderSpeechBubble(xPx, yPx - (charHeight / 2), p.msg);
           }
         }
@@ -847,11 +878,11 @@
     Object.values(images).forEach(img => img.onload = render);
 
     function sendMessage() {
-      if (myRole && players[myRole].isBusy) return;
+      if (myRole && players[myRole] && players[myRole].isBusy) return;
       playClickSound();
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
-      if (text && myRole) {
+      if (text && myRole && players[myRole]) {
         players[myRole].msg = text;
         players[myRole].msgTime = Date.now();
         input.value = '';
@@ -877,7 +908,7 @@
     }
 
     function startDrag(e) {
-      if (!myRole) return;
+      if (!myRole || !players[myRole]) return;
       const coords = getCoordinates(e);
       const charHeight = canvas.height * 0.37;
       const charWidth = charHeight * 0.90;
@@ -887,12 +918,20 @@
       const petHeightPct = (petSize / canvas.height) * 100;
 
       if (
-        pet.room === currentRoom &&
-        coords.xPct >= pet.x - petWidthPct / 2 &&
-        coords.xPct <= pet.x + petWidthPct / 2 &&
-        coords.yPct >= pet.y - petHeightPct / 2 &&
-        coords.yPct <= pet.y + petHeightPct / 2
+        pet && pet.room === currentRoom &&
+        coords.xPct >= (pet.x || 0) - petWidthPct / 2 &&
+        coords.xPct <= (pet.x || 0) + petWidthPct / 2 &&
+        coords.yPct >= (pet.y || 0) - petHeightPct / 2 &&
+        coords.yPct <= (pet.y || 0) + petHeightPct / 2
       ) {
+        const now = Date.now();
+        if (now - lastPetClickTime < 300) {
+          pet.emoji = '😸';
+          pet.emojiTime = now;
+          savePetPositionThrottled(true);
+          render();
+        }
+        lastPetClickTime = now;
         draggedTarget = 'pet';
         return;
       }
@@ -902,10 +941,10 @@
         const heightPct = (charHeight / canvas.height) * 100;
 
         if (
-          coords.xPct >= players[myRole].x - widthPct / 2 &&
-          coords.xPct <= players[myRole].x + widthPct / 2 &&
-          coords.yPct >= players[myRole].y - heightPct / 2 &&
-          coords.yPct <= players[myRole].y + heightPct / 2
+          coords.xPct >= (players[myRole].x || 0) - widthPct / 2 &&
+          coords.xPct <= (players[myRole].x || 0) + widthPct / 2 &&
+          coords.yPct >= (players[myRole].y || 0) - heightPct / 2 &&
+          coords.yPct <= (players[myRole].y || 0) + heightPct / 2
         ) {
           draggedTarget = 'player';
         }
@@ -913,7 +952,7 @@
     }
 
     function moveDrag(e) {
-      if (!draggedTarget || !myRole) return;
+      if (!draggedTarget || !myRole || !players[myRole]) return;
       e.preventDefault();
       const coords = getCoordinates(e);
 
@@ -924,7 +963,7 @@
         checkControlsVisibility();
         render();
         savePositionThrottled();
-      } else if (draggedTarget === 'pet') {
+      } else if (draggedTarget === 'pet' && pet) {
         pet.x = Math.max(5, Math.min(95, coords.xPct));
         pet.y = Math.max(5, Math.min(95, coords.yPct));
         render();
@@ -947,11 +986,11 @@
     function savePositionThrottled(force = false) {
       const now = Date.now();
       if (force || now - lastSaveTime > 50) {
-        if (!myRole || !currentRoomCode) return;
+        if (!myRole || !currentRoomCode || !players[myRole]) return;
         set(ref(db, `rooms/${currentRoomCode}/game_state/players/${myRole}`), {
-          x: players[myRole].x,
-          y: players[myRole].y,
-          room: players[myRole].room,
+          x: players[myRole].x || 0,
+          y: players[myRole].y || 0,
+          room: players[myRole].room || 'wall1',
           msg: players[myRole].msg || '',
           msgTime: players[myRole].msgTime || 0,
           isBusy: players[myRole].isBusy || false,
@@ -966,11 +1005,13 @@
     function savePetPositionThrottled(force = false) {
       const now = Date.now();
       if (force || now - lastSaveTime > 50) {
-        if (!currentRoomCode) return;
+        if (!currentRoomCode || !pet) return;
         set(ref(db, `rooms/${currentRoomCode}/game_state/pet`), {
-          x: pet.x,
-          y: pet.y,
-          room: pet.room
+          x: pet.x || 0,
+          y: pet.y || 0,
+          room: pet.room || 'wall1',
+          emoji: pet.emoji || '',
+          emojiTime: pet.emojiTime || 0
         });
         lastSaveTime = now;
       }
